@@ -3,14 +3,14 @@ import {ScrollView, Text} from 'react-native';
 import {styles} from './styles';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-const Settings = () => {
+const Event = () => {
   return (
     <SafeAreaView>
       <ScrollView style={styles.container}>
-        <Text>Settings</Text>
+        <Text>Event</Text>
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-export default React.memo(Settings);
+export default React.memo(Event);

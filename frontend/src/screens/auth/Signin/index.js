@@ -15,6 +15,10 @@ const Signin = ({navigation}) => {
     navigation.navigate('Signup');
   };
 
+  const onApp = () => {
+    navigation.navigate('Tabs');
+  };
+
   return (
     <SafeAreaView>
       <ScrollView style={styles.container}>
@@ -23,7 +27,7 @@ const Signin = ({navigation}) => {
         <Input label="E-mail" placeholder="Enter your e-mail" />
         <Input isPassword label="Password" placeholder="Enter your password" />
 
-        <Button style={styles.button} title="Sign In" />
+        <Button onPress={onApp} style={styles.button} title="Sign In" />
 
         <Text style={styles.footerText}>
           Don't have an account?
