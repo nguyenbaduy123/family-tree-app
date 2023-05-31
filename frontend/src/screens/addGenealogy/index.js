@@ -13,12 +13,12 @@ const AddGenealogy = ({navigation}) => {
     <SafeAreaView>
       <ScrollView style={styles.container}>
         <AuthHeader onBackPress={onBack} title="Tạo gia phả mới" />
-        <Input label="Tên gia phả" placeholder="Nhập tên gia phả" />
+        <Input label="Tên gia phả*" placeholder="Nhập tên gia phả" />
         <Input
           label="Tên nhánh"
           placeholder="Tên riêng phân biệt các pha giả dòng họ"
         />
-        <Input label="Người tạo" placeholder="Người tạo" />
+        <Input label="Người tạo*" placeholder="Người tạo" />
         <Input label="Địa chỉ" placeholder="Nhập địa chỉ" />
         <Input label="Gia sử dòng họ" placeholder="Nhập nội dung" />
         <View style={styles.buttonContainer}>

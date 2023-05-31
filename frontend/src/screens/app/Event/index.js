@@ -1,14 +1,25 @@
 import React from 'react';
-import {ScrollView, Text} from 'react-native';
+import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {styles} from './styles';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-const Event = () => {
+const Event = ({navigation}) => {
+  const onCreate = () => {
+    navigation.navigate('AddEvent');
+  };
   return (
     <SafeAreaView>
-      <ScrollView style={styles.container}>
-        <Text>Event</Text>
-      </ScrollView>
+      <View style={styles.eventContainer}>
+        <Text style={styles.eventText}>Sự kiện</Text>
+        <TouchableOpacity style={styles.button} onPress={onCreate}>
+          <Image
+            style={styles.icon}
+            source={require('../../../assets/tabs/plus.png')}
+          />
+          <Text style={styles.buttonText}>Tạo sự kiện</Text>
+        </TouchableOpacity>
+      </View>
+      <ScrollView style={styles.container}></ScrollView>
     </SafeAreaView>
   );
 };

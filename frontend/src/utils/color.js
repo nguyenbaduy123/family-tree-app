@@ -7,4 +7,5 @@ export const colors = {
   lightGrey: '#DADADA',
   darkGrey: '#3F4A59',
   whiteGrey: '#FFC09D',
+  opalescent: '#DBF07A',
 };

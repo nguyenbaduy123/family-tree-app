@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import { colors } from '../../../utils/color';
+import {colors} from '../../utils/color';
 
 export const styles = StyleSheet.create({
   container: {
@@ -28,5 +28,21 @@ export const styles = StyleSheet.create({
   buttonText: {
     fontWeight: 'bold',
     fontSize: 18,
+  },
+  labelname: {
+    marginVertical: 4,
+    color: colors.blue,
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  selectContainer: {
+    borderWidth: 1,
+    borderColor: colors.grey,
+    borderRadius: 14,
+    marginBottom: 14,
+  },
+  select: {
+    height: 50,
+    fontWeight: 'bold',
   },
 });

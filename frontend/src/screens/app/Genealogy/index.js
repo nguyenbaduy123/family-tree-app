@@ -19,7 +19,7 @@ const Genealogy = ({navigation}) => {
           />
           <Text style={styles.buttonText}>Quét</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={onCreate}>
           <Image
             style={styles.icon}
             source={require('../../../assets/tabs/plus.png')}

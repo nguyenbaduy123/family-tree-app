@@ -5,13 +5,15 @@ import Signup from './src/screens/auth/Signup';
 import Signin from './src/screens/auth/Signin';
 import Event from './src/screens/app/Event';
 import Genealogy from './src/screens/app/Genealogy';
-import Profile from './src/screens/app/Profile';
+import Account from './src/screens/app/Account';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {colors} from './src/utils/color';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import AddGenealogy from './src/screens/addGenealogy';
+import AddEvent from './src/screens/addEvent';
+import ViewProfile from './src/screens/viewProfile';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -23,28 +25,28 @@ const Tabs = () => {
         tabBarIcon: ({focused, color, size}) => {
           let icon;
 
-          if (route.name === 'Genealogy') {
+          if (route.name === 'Gia phả') {
             icon = focused
               ? require('./src/assets/tabs/genealogy.jpg')
               : require('./src/assets/tabs/genealogy.jpg');
-          } else if (route.name === 'Profile') {
-            icon = focused
-              ? require('./src/assets/tabs/profile.png')
-              : require('./src/assets/tabs/profile.png');
-          } else if (route.name === 'Event') {
+          } else if (route.name === 'Sự kiện') {
             icon = focused
               ? require('./src/assets/tabs/event.png')
               : require('./src/assets/tabs/event.png');
-          }
+          } else if (route.name === 'Tài khoản') {
+            icon = focused
+              ? require('./src/assets/tabs/account.png')
+              : require('./src/assets/tabs/account.png');
+          } 
 
           // You can return any component that you like here!
           return <Image style={{width: 30, height: 30}} source={icon} />;
         },
         headerShown: false,
       })}>
-      <Tab.Screen name="Genealogy" component={Genealogy} />
-      <Tab.Screen name="Event" component={Event} />
-      <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen name="Gia phả" component={Genealogy} />
+      <Tab.Screen name="Sự kiện" component={Event} />
+      <Tab.Screen name="Tài khoản" component={Account} />
     </Tab.Navigator>
   );
 };
@@ -84,6 +86,16 @@ const App = () => {
           <Stack.Screen
             name="AddGenealogy"
             component={AddGenealogy}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="AddEvent"
+            component={AddEvent}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="ViewProfile"
+            component={ViewProfile}
             options={{headerShown: false}}
           />
         </Stack.Navigator>

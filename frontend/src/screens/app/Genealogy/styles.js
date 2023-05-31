@@ -21,7 +21,6 @@ export const styles = StyleSheet.create({
     marginHorizontal: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
     justifyContent:'space-evenly',
     borderRadius: 14,
   },
