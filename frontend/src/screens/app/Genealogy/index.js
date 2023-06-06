@@ -33,7 +33,7 @@ const Genealogy = ({navigation}) => {
           source={require('../../../assets/tabs/family.png')}
         />
         <Text style={styles.text}>
-          Bạn chưa tạo cây gia phả nào, nhấn vào nút
+          Bạn chưa tạo cây gia phả nào, nhấn vào nút 
           <Text onPress={onCreate} style={styles.textLink}>
             [+ Thêm]
           </Text>

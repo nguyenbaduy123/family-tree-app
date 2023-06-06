@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {colors} from '../../../utils/color';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 export const styles = StyleSheet.create({
   eventContainer: {
@@ -7,8 +8,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 15,
     backgroundColor: colors.orange,
     width: '100%',
-    height: '70%',
-    flexDirection: 'row',
+    height: '71%',
     justifyContent: 'space-between',
   },
   eventText: {
@@ -33,4 +33,57 @@ export const styles = StyleSheet.create({
   buttonText: {
     fontWeight: 'bold',
   },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  timer: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    backgroundColor: 'white',
+    borderRadius: 20,
+    marginTop: 12
+  },
+  timerText: {
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    fontSize: 16,
+    marginVertical: 5
+  },
+  timerNumber: {
+    color: colors.orange,
+  },
+  textFontsize: {
+    fontSize: 18,
+    fontWeight: 'bold'
+  },
+  calender: {
+    marginTop: 15,
+    backgroundColor: 'white',
+    height: '50%',
+    borderRadius: 20,
+  },
+  calenderHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 10,
+    marginHorizontal: 20,
+  },
+  calenderMain: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    marginTop: 10
+    
+  },
+  calenderFontLastLine: {
+    fontSize: 8,
+  },
+  calenderText: {
+    alignItems: 'center',
+  },
+  calenderMainDay: {
+    marginBottom: 5,
+  }
 });
