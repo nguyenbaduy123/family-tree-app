@@ -1,14 +1,19 @@
+require('dotenv').config();
 import React, {useState} from 'react';
-import {ScrollView, Text, View} from 'react-native';
+import {ScrollView, Text, View, Alert} from 'react-native';
 import {styles} from './styles';
 import AuthHeader from '../../../components/AuthHeader';
 import Input from '../../../components/Input';
 import Checkbox from '../../../components/Checkbox';
 import Button from '../../../components/Button';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import axios from 'axios';
 
 const Signup = ({navigation}) => {
   const [checked, setChecked] = useState(false);
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const onBack = () => {
     navigation.goBack();
@@ -18,14 +23,56 @@ const Signup = ({navigation}) => {
     navigation.navigate('Signin');
   };
 
+  const handleSignUp = async () => {
+    if (!username || !email || !password || !checked) {
+      // Hiển thị thông báo lỗi khi thiếu thông tin
+      Alert.alert(
+        'Thông báo',
+        'Vui lòng điền đầy đủ thông tin để đăng ký tài khoản!',
+        [{text: 'OK'}],
+        {cancelable: false},
+      );
+      return;
+    }
+    try {
+      const response = await axios.post(`${process.env.URL}/users`, {
+        username: username,
+        email: email,
+        password: password,
+      });
+      console.log(response.data);
+      Alert.alert(
+        'Thông báo',
+        'Đăng ký tài khoản thành công, vui lòng trở lại trang đăng nhập để sử dụng dịch vụ!',
+        [{text: 'OK'}],
+        {cancelable: false},
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <SafeAreaView>
       <ScrollView style={styles.container}>
         <AuthHeader onBackPress={onBack} title="Sign Up" />
 
-        <Input label="Name" placeholder="Enter your name" />
-        <Input label="E-mail" placeholder="Enter your e-mail" />
-        <Input isPassword label="Password" placeholder="Enter your password" />
+        <Input
+          label="Username"
+          placeholder="Enter your username"
+          onChangeText={value => setUsername(value)}
+        />
+        <Input
+          label="E-mail"
+          placeholder="Enter your e-mail"
+          onChangeText={value => setEmail(value)}
+        />
+        <Input
+          isPassword
+          label="Password"
+          placeholder="Enter your password"
+          onChangeText={value => setPassword(value)}
+        />
 
         <View style={styles.agreeRow}>
           <Checkbox checked={checked} onCheck={setChecked} />
@@ -35,7 +82,11 @@ const Signup = ({navigation}) => {
           </Text>
         </View>
 
-        <Button style={styles.button} title="Sign Up" />
+        <Button
+          style={styles.button}
+          onPress={() => handleSignUp()}
+          title="Sign Up"
+        />
 
         <Text style={styles.footerText}>
           Already have an account?
