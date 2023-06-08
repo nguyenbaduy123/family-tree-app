@@ -1,12 +1,17 @@
-import React from 'react';
-import {ScrollView, Text} from 'react-native';
+require('dotenv').config();
+import React, {useState} from 'react';
+import {ScrollView, Text, Alert} from 'react-native';
 import {styles} from './styles';
 import AuthHeader from '../../../components/AuthHeader';
 import Input from '../../../components/Input';
 import Button from '../../../components/Button';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import axios from 'axios';
 
 const Signin = ({navigation}) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   const onBack = () => {
     navigation.goBack();
   };
@@ -15,20 +20,56 @@ const Signin = ({navigation}) => {
     navigation.navigate('Signup');
   };
 
-  const onApp = () => {
-    navigation.navigate('Tabs');
+  const handleSignIn = async () => {
+    try {
+      const response = await axios.post(`${process.env.URL}/users/login`, {
+        email: email,
+        password: password,
+      });
+      if (response.data.token) {
+        navigation.navigate('Tabs');
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        Alert.alert(
+          'Thông báo',
+          'Bạn nhập sai tài khoản rồi. Vui lòng nhập lại để sử dụng dịch vụ!',
+          [
+            {
+              text: 'OK',
+              onPress: () => {
+                navigation.navigate('Signin');
+              },
+            },
+          ],
+          {cancelable: false},
+        );
+      } else {
+        console.error(error);
+      }
+    }
   };
 
   return (
     <SafeAreaView>
       <ScrollView style={styles.container}>
         <AuthHeader onBackPress={onBack} title="Sign In" />
-
-        <Input label="E-mail" placeholder="Enter your e-mail" />
-        <Input isPassword label="Password" placeholder="Enter your password" />
-
-        <Button onPress={onApp} style={styles.button} title="Sign In" />
-
+        <Input
+          label="E-mail"
+          placeholder="Enter your e-mail"
+          onChangeText={value => setEmail(value)}
+        />
+        <Input
+          isPassword
+          label="Password"
+          placeholder="Enter your password"
+          onChangeText={value => setPassword(value)}
+        />
+        <Button
+          onPress={() => handleSignIn()}
+          style={styles.button}
+          title="Sign In"
+        />
         <Text style={styles.footerText}>
           Don't have an account?
           <Text onPress={onSignUp} style={styles.footerLink}>

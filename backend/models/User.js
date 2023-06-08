@@ -53,11 +53,11 @@ class User {
   login = async (email, password) => {
     const user = await knex('users').where('email', email).first()
     if (user) {
-      const isMatch = await comparePassword(password, user.hash_password)
-      if (isMatch) return user
+      const isMatch = await comparePassword(password, user.hash_password);
+      if (isMatch) return user;
     }
     return null
   }
 }
 
-module.exports = User
+module.exports = User;
