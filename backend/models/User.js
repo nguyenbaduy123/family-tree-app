@@ -25,7 +25,7 @@ class User {
     return knex('users').where('id', id).first()
   }
 
-  async createUser(userData) {
+  createUser = async (userData) => {
     const { error } = userSchema.validate(userData)
     if (error) {
       return { success: false, message: error.details[0].message }
@@ -50,7 +50,7 @@ class User {
     }
   }
 
-  async login(email, password) {
+  login = async (email, password) => {
     const user = await knex('users').where('email', email).first()
     if (user) {
       const isMatch = await comparePassword(password, user.hash_password)
