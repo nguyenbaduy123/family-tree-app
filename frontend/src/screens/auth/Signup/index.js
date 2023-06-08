@@ -1,4 +1,3 @@
-require('dotenv').config();
 import React, {useState} from 'react';
 import {ScrollView, Text, View, Alert} from 'react-native';
 import {styles} from './styles';
@@ -35,7 +34,7 @@ const Signup = ({navigation}) => {
       return;
     }
     try {
-      const response = await axios.post(`${process.env.URL}/users`, {
+      const response = await axios.post(`http://172.21.144.1:2222/api/users`, {
         username: username,
         email: email,
         password: password,
