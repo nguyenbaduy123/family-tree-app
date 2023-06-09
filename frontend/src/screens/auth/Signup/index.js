@@ -39,11 +39,17 @@ const Signup = ({navigation}) => {
         email: email,
         password: password,
       });
-      console.log(response.data);
       Alert.alert(
         'Thông báo',
         'Đăng ký tài khoản thành công, vui lòng trở lại trang đăng nhập để sử dụng dịch vụ!',
-        [{text: 'OK'}],
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              navigation.navigate('Signin');
+            },
+          },
+        ],
         {cancelable: false},
       );
     } catch (error) {
