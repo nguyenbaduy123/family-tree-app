@@ -1,13 +1,6 @@
 {
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnPaste": true,
-  "editor.formatOnSave": true,
-  "explorer.confirmDelete": false,
-  "javascript.preferences.quoteStyle": "single",
-  "prettier.semi": false,
-  "prettier.jsxSingleQuote": true,
-  "typescript.preferences.quoteStyle": "single",
-  "prettier.singleQuote": true,
-  "editor.tabSize": 2,
-  "editor.minimap.enabled": false
+  "trailingComma": "es5",
+  "tabWidth": 2,
+  "semi": false,
+  "singleQuote": true
 }
