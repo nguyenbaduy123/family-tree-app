@@ -1,4 +1,3 @@
-require('dotenv').config();
 import React, {useState} from 'react';
 import {ScrollView, Text, Alert} from 'react-native';
 import {styles} from './styles';
@@ -21,11 +20,24 @@ const Signin = ({navigation}) => {
   };
 
   const handleSignIn = async () => {
+    if (!email || !password) {
+      // Hiển thị thông báo lỗi khi thiếu thông tin
+      Alert.alert(
+        'Thông báo',
+        'Vui lòng điền đầy đủ thông tin để đăng nhập!',
+        [{text: 'OK'}],
+        {cancelable: false},
+      );
+      return;
+    }
     try {
-      const response = await axios.post(`${process.env.URL}/users/login`, {
-        email: email,
-        password: password,
-      });
+      const response = await axios.post(
+        `http://172.21.144.1:2222/api/users/login`,
+        {
+          email: email,
+          password: password,
+        },
+      );
       if (response.data.token) {
         navigation.navigate('Tabs');
       }
@@ -37,9 +49,6 @@ const Signin = ({navigation}) => {
           [
             {
               text: 'OK',
-              onPress: () => {
-                navigation.navigate('Signin');
-              },
             },
           ],
           {cancelable: false},
