@@ -4,14 +4,14 @@ const knexConfig = require('./knexfile')
 const createDatabase = async () => {
   try {
     const defaultConnection = knex(knexConfig.development)
+    const database = knexConfig.development.connection.database
 
-    await defaultConnection.raw(
-      `CREATE DATABASE ${knexConfig.development.connection.database}`
-    )
+    // await defaultConnection.raw(`DROP DATABASE ${database}`)
+    // console.log(`Database ${databaseName} dropped successfully.`)
 
-    console.log(
-      `Database ${knexConfig.development.connection.database} created successfully.`
-    )
+    await defaultConnection.raw(`CREATE DATABASE ${database}`)
+
+    console.log(`Database ${database} created successfully.`)
   } catch (error) {
     console.error('Error creating database:', error)
   } finally {
