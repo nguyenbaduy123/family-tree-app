@@ -6,7 +6,7 @@ const knex = require('../config/connection')
 const { comparePassword } = require('../utils/passwordUtils')
 
 const userSchema = Joi.object({
-  id: Joi.string().default(uuidv4),
+  id: Joi.string().required(),
   username: Joi.string().required(),
   email: Joi.string().email().required(),
   hash_password: Joi.string().required(),

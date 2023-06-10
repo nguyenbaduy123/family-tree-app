@@ -3,7 +3,7 @@ const knex = require('../config/connection')
 const { v4: uuidv4 } = require('uuid')
 
 const familySchema = Joi.object({
-  id: Joi.string(),
+  id: Joi.string().required(),
   owner_id: Joi.string().required(),
   name: Joi.string().required(),
 })

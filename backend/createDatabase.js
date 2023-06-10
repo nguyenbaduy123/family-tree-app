@@ -2,12 +2,9 @@ const knex = require('knex')
 const knexConfig = require('./knexfile')
 
 const createDatabase = async () => {
+  const defaultConnection = knex(knexConfig.development)
   try {
-    const defaultConnection = knex(knexConfig.development)
     const database = knexConfig.development.connection.database
-
-    // await defaultConnection.raw(`DROP DATABASE ${database}`)
-    // console.log(`Database ${databaseName} dropped successfully.`)
 
     await defaultConnection.raw(`CREATE DATABASE ${database}`)
 

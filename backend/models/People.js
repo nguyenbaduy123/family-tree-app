@@ -3,7 +3,7 @@ const Joi = require('joi')
 const knex = require('../config/connection')
 
 const personSchema = Joi.object({
-  id: Joi.string().default(uuidv4),
+  id: Joi.string().required(),
   full_name: Joi.string(),
   gender: Joi.string(),
   citizen_id: Joi.string(),
