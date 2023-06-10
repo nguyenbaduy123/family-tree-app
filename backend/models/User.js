@@ -1,5 +1,7 @@
 const Joi = require('joi')
 const { v4: uuidv4 } = require('uuid')
+const _ = require('lodash')
+const { pick } = require('lodash')
 
 require('dotenv').config()
 const knex = require('../config/connection')
@@ -28,8 +30,11 @@ class User {
   }
 
   createUser = async (userData) => {
-    const data = { ...userData, id: uuidv4() }
-    const { error } = userSchema.validate(data)
+    const data = {
+      ..._.pick(userData, Object.keys(userSchema.describe().keys)),
+      id: uuidv4(),
+    }
+    const { error, value } = userSchema.validate(data)
     if (error) {
       return { success: false, message: error.details[0].message }
     }
@@ -46,7 +51,7 @@ class User {
     }
 
     try {
-      const user = await knex('users').insert(data).returning('*')
+      const user = await knex('users').insert(value).returning('*')
       return { success: true, message: 'User created successfully', user: user }
     } catch (error) {
       console.error('Create user error: ', error)
@@ -54,13 +59,41 @@ class User {
     }
   }
 
-  login = async (email, password) => {
-    const user = await knex('users').where('email', email).first()
-    if (user) {
-      const isMatch = await comparePassword(password, user.hash_password)
-      if (isMatch) return user
+  updateUser = async (userData) => {
+    try {
+      await knex('users')
+        .where('id', userData.user_id)
+        .update(pick(userData, ['full_name', 'avatar', 'phone']))
+
+      return { success: true, message: 'User updated successfully!' }
+    } catch (error) {
+      console.error('Error updating user:', error)
+      return { success: false, message: 'Failed to create user' }
     }
-    return null
+  }
+
+  login = async (email, password) => {
+    try {
+      const user = await knex('users').where('email', email).first()
+      if (user) {
+        const isMatch = await comparePassword(password, user.hash_password)
+        if (isMatch)
+          return {
+            user: user,
+            success: true,
+            message: 'Đăng nhập thành công',
+            statusCode: 200,
+          }
+      }
+      return {
+        success: false,
+        message: 'Tài khoản hoặc mật khẩu không chính xác',
+        statusCode: 401,
+      }
+    } catch (error) {
+      console.error('Login error: ', error)
+      return { success: false, message: 'Có lỗi xảy ra', statusCode: 500 }
+    }
   }
 }
 
