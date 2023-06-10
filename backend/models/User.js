@@ -1,10 +1,14 @@
-require('dotenv').config()
 const Joi = require('joi')
+const { v4: uuidv4 } = require('uuid')
+const _ = require('lodash')
+const { pick } = require('lodash')
+
+require('dotenv').config()
 const knex = require('../config/connection')
 const { comparePassword } = require('../utils/passwordUtils')
 
 const userSchema = Joi.object({
-  id: Joi.number().integer(),
+  id: Joi.string().required(),
   username: Joi.string().required(),
   email: Joi.string().email().required(),
   hash_password: Joi.string().required(),
@@ -26,7 +30,11 @@ class User {
   }
 
   createUser = async (userData) => {
-    const { error } = userSchema.validate(userData)
+    const data = {
+      ..._.pick(userData, Object.keys(userSchema.describe().keys)),
+      id: uuidv4(),
+    }
+    const { error, value } = userSchema.validate(data)
     if (error) {
       return { success: false, message: error.details[0].message }
     }
@@ -43,21 +51,50 @@ class User {
     }
 
     try {
-      const user = await knex('users').insert(userData).returning('*')
+      const user = await knex('users').insert(value).returning('*')
       return { success: true, message: 'User created successfully', user: user }
     } catch (error) {
+      console.error('Create user error: ', error)
+      return { success: false, message: 'Failed to create user' }
+    }
+  }
+
+  updateUser = async (userData) => {
+    try {
+      await knex('users')
+        .where('id', userData.user_id)
+        .update(pick(userData, ['full_name', 'avatar', 'phone']))
+
+      return { success: true, message: 'User updated successfully!' }
+    } catch (error) {
+      console.error('Error updating user:', error)
       return { success: false, message: 'Failed to create user' }
     }
   }
 
   login = async (email, password) => {
-    const user = await knex('users').where('email', email).first()
-    if (user) {
-      const isMatch = await comparePassword(password, user.hash_password);
-      if (isMatch) return user;
+    try {
+      const user = await knex('users').where('email', email).first()
+      if (user) {
+        const isMatch = await comparePassword(password, user.hash_password)
+        if (isMatch)
+          return {
+            user: user,
+            success: true,
+            message: 'Đăng nhập thành công',
+            statusCode: 200,
+          }
+      }
+      return {
+        success: false,
+        message: 'Tài khoản hoặc mật khẩu không chính xác',
+        statusCode: 401,
+      }
+    } catch (error) {
+      console.error('Login error: ', error)
+      return { success: false, message: 'Có lỗi xảy ra', statusCode: 500 }
     }
-    return null
   }
 }
 
-module.exports = User;
+module.exports = User

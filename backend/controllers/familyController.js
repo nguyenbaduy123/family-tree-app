@@ -4,7 +4,7 @@ const family = new Family()
 
 const createFamily = async (req, res) => {
   const familyData = req.body
-  familyData.owner_id = req.query.userId
+  familyData.owner_id = req.customParams.user_id
   const result = await family.createFamily(familyData)
   if (result.success) {
     res.json(result)
