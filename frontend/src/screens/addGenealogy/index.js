@@ -15,11 +15,10 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AddGenealogy = ({navigation}) => {
-  const [owner_id, setOwner_id] = useState('');
   const [name, setName] = useState('');
-  // const [branch_name, setBranch_name] = useState('');
-  // const [address, setAddress] = useState('');
-  // const [story, setStory] = useState('');
+  const [branch_name, setBranch_name] = useState('');
+  const [address, setAddress] = useState('');
+  const [story, setStory] = useState('');
 
   const onBack = () => {
     navigation.goBack();
@@ -36,15 +35,15 @@ const AddGenealogy = ({navigation}) => {
       return;
     }
     try {
-      const user_id = await AsyncStorage.getItem("user_id");
-      const token = await AsyncStorage.getItem("token");
+      const user_id = await AsyncStorage.getItem('user_id');
+      const token = await AsyncStorage.getItem('token');
       const response = await axios.post(
         `http://172.21.144.1:2222/api/families?user_id=${user_id}`,
         {
           name: name,
-          // brach_name: branch_name,
-          // address: address,
-          // story: story,
+          branch_name: branch_name,
+          address: address,
+          story: story,
         },
         {
           headers: {
@@ -83,12 +82,12 @@ const AddGenealogy = ({navigation}) => {
           placeholder="Nhập tên gia phả"
           onChangeText={value => setName(value)}
         />
-        {/* <Input
+        <Input
           label="Tên nhánh"
           placeholder="Tên riêng phân biệt các pha giả dòng họ"
           onChangeText={value => setBranch_name(value)}
-        /> */}
-        {/* <Input
+        />
+        <Input
           label="Địa chỉ"
           placeholder="Nhập địa chỉ"
           onChangeText={value => setAddress(value)}
@@ -97,7 +96,7 @@ const AddGenealogy = ({navigation}) => {
           label="Gia sử dòng họ"
           placeholder="Nhập nội dung"
           onChangeText={value => setStory(value)}
-        /> */}
+        />
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
