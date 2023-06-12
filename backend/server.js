@@ -25,7 +25,7 @@ app.use('/api/families', verifyToken, familyRoutes)
 app.use('/api/people', verifyToken, peopleRoutes)
 
 app.use((req, res, next) => {
-  res.status(404).json({ message: 'Route not found' })
+  res.status(404).json({ message: 'Route not found!!!123' })
 })
 
 app.use((err, req, res, next) => {

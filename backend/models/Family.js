@@ -13,14 +13,17 @@ const familySchema = Joi.object({
 
 class Family {
   createFamily = async (familyData) => {
-    const data = { ...familyData, id: uuidv4() }
-    const { error } = familySchema.validate(data)
+    const data = {
+      ..._.pick(familyData, Object.keys(familySchema.describe().keys)),
+      id: uuidv4(),
+    }
+    const { error, value } = familySchema.validate(data)
     if (error) {
       return { success: false, message: error.details[0].message }
     }
 
     try {
-      const family = await knex('families').insert(data).returning('*')
+      const family = await knex('families').insert(value).returning('*')
       return {
         success: true,
         message: 'Family created successfully',
