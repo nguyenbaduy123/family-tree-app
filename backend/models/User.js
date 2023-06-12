@@ -3,7 +3,6 @@ const { v4: uuidv4 } = require('uuid')
 const _ = require('lodash')
 const { pick } = require('lodash')
 
-require('dotenv').config()
 const knex = require('../config/connection')
 const { comparePassword } = require('../utils/passwordUtils')
 
@@ -39,18 +38,15 @@ class User {
       return { success: false, message: error.details[0].message }
     }
 
-    const { email, username } = userData
-
-    const existingUser = await knex('users')
-      .where('email', email)
-      .orWhere('username', username)
-      .first()
-
-    if (existingUser) {
-      return { success: false, message: 'Email or username already exists' }
-    }
-
     try {
+      const { email, username } = userData
+      const existingUser = await knex('users')
+        .where('email', email)
+        .orWhere('username', username)
+        .first()
+      if (existingUser) {
+        return { success: false, message: 'Email or username already exists' }
+      }
       const user = await knex('users').insert(value).returning('*')
       return { success: true, message: 'User created successfully', user: user }
     } catch (error) {

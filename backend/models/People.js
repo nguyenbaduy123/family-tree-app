@@ -2,7 +2,6 @@ const Joi = require('joi')
 const { v4: uuidv4 } = require('uuid')
 
 const _ = require('lodash')
-require('dotenv').config()
 const knex = require('../config/connection')
 
 const personSchema = Joi.object({
