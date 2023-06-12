@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const Joi = require('joi')
 const knex = require('../config/connection')
 const { v4: uuidv4 } = require('uuid')
@@ -6,7 +7,7 @@ const familySchema = Joi.object({
   id: Joi.string().required(),
   owner_id: Joi.string().required(),
   name: Joi.string().required(),
-  brach_name: Joi.string(),
+  branch_name: Joi.string(),
   address: Joi.string(),
   story: Joi.string(),
 })
