@@ -1,4 +1,3 @@
-require('dotenv').config();
 import React, {useState} from 'react';
 import {ScrollView, Text, Alert} from 'react-native';
 import {styles} from './styles';
@@ -7,6 +6,7 @@ import Input from '../../../components/Input';
 import Button from '../../../components/Button';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Signin = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -21,12 +21,27 @@ const Signin = ({navigation}) => {
   };
 
   const handleSignIn = async () => {
+    if (!email || !password) {
+      // Hiển thị thông báo lỗi khi thiếu thông tin
+      Alert.alert(
+        'Thông báo',
+        'Vui lòng điền đầy đủ thông tin để đăng nhập!',
+        [{text: 'OK'}],
+        {cancelable: false},
+      );
+      return;
+    }
     try {
-      const response = await axios.post(`${process.env.URL}/users/login`, {
-        email: email,
-        password: password,
-      });
-      if (response.data.token) {
+      const response = await axios.post(
+        `http://172.21.144.1:2222/api/users/login`,
+        {
+          email: email,
+          password: password,
+        },
+      );
+      if (response.data?.token) {
+        AsyncStorage.setItem('user_id', response.data.user.id);
+        AsyncStorage.setItem('token',response.data.token);
         navigation.navigate('Tabs');
       }
     } catch (error) {
@@ -37,9 +52,6 @@ const Signin = ({navigation}) => {
           [
             {
               text: 'OK',
-              onPress: () => {
-                navigation.navigate('Signin');
-              },
             },
           ],
           {cancelable: false},
