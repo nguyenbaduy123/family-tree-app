@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const Joi = require('joi')
 const knex = require('../config/connection')
 const _ = require('lodash')

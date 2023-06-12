@@ -1,13 +1,8 @@
 import React from 'react';
-import {
-  Image,
-  Text,
-  TouchableOpacity,
-  View,
-  Alert,
-} from 'react-native';
+import {Image, Text, TouchableOpacity, View, Alert} from 'react-native';
 import {styles} from './styles';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Account = ({navigation}) => {
   const ViewProfile = () => {
@@ -24,7 +19,9 @@ const Account = ({navigation}) => {
         },
         {
           text: 'Đồng ý',
-          onPress: () => {
+          onPress: async () => {
+            await AsyncStorage.removeItem('user_id');
+            await AsyncStorage.removeItem('token');
             navigation.navigate('Splash');
           },
         },
@@ -44,7 +41,7 @@ const Account = ({navigation}) => {
         {
           text: 'Đồng ý',
           onPress: () => {
-            console.log("Đã xóa tài khoản thành công!");
+            console.log('Đã xóa tài khoản thành công!');
           },
         },
       ],
