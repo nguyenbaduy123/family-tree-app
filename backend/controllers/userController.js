@@ -19,33 +19,30 @@ const createUser = async (req, res) => {
 }
 
 const login = async (req, res) => {
-  const email = req.body.email
-  const password = req.body.password
-  try {
-    const result = await user.login(email, password)
-    if (result) {
-      const token = jwt.sign({ user: result }, process.env.SECRET_KEY, {
-        expiresIn: '72hr',
-      })
-      res.status(200).json({
-        success: true,
-        user: result,
-        message: 'Đăng nhập thành công',
-        token: token,
-      })
-    } else {
-      res.status(401).json({
-        success: false,
-        message: 'Email hoặc mật khẩu không chính xác',
-      })
-    }
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Có lỗi xảy ra' })
-    console.error('Login error: ', error)
+  const { email, password } = req.customParams
+  const result = await user.login(email, password)
+  if (result.success) {
+    const token = jwt.sign({ user: result.user }, process.env.SECRET_KEY, {
+      expiresIn: '72hr',
+    })
+    res.status(result.statusCode).json({
+      ...result,
+      token: token,
+    })
+  } else {
+    res.status(result.statusCode).json({ ...result })
   }
 }
 
-const updateUser = (req, res) => {}
+const updateUser = async (req, res) => {
+  const userData = req.customParams
+  const result = await user.updateUser(userData)
+  if (result.success) {
+    res.json(result)
+  } else {
+    res.status(500).json(result)
+  }
+}
 
 const deleteUser = (req, res) => {}
 

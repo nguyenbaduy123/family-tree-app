@@ -3,10 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "start": "node server",
     "server": "nodemon server",
-    "create": "node createDatabase.js",
+    "create": "docker run --name project2 -e POSTGRES_PASSWORD=project2 -e POSTGRES_USER=postgres -e POSTGRES_DB=family_tree_dev -p 5432:5432 -d postgres && node createDatabase.js",
     "migrate": "npx knex migrate:latest",
-    "seed": "npx knex seed:run"
+    "seed": "npx knex seed:run",
+    "re-migrate": "node createDatabase && npx knex migrate:latest"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -20,7 +22,9 @@
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.0",
     "knex": "^2.4.2",
+    "lodash": "^4.17.21",
     "morgan": "~1.9.1",
+    "nodemon": "^2.0.22",
     "pg": "^8.11.0",
     "uuid": "^9.0.0"
   }

@@ -6,6 +6,7 @@ import Input from '../../../components/Input';
 import Button from '../../../components/Button';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Signin = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -38,7 +39,9 @@ const Signin = ({navigation}) => {
           password: password,
         },
       );
-      if (response.data.token) {
+      if (response.data?.token) {
+        AsyncStorage.setItem('user_id', response.data.user.id);
+        AsyncStorage.setItem('token',response.data.token);
         navigation.navigate('Tabs');
       }
     } catch (error) {

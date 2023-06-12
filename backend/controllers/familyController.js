@@ -3,8 +3,8 @@ const Family = require('../models/Family')
 const family = new Family()
 
 const createFamily = async (req, res) => {
-  const familyData = req.body
-  familyData.owner_id = req.query.userId
+  let familyData = req.customParams
+  familyData.owner_id = familyData.user_id
   const result = await family.createFamily(familyData)
   if (result.success) {
     res.json(result)
