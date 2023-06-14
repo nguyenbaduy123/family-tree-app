@@ -24,7 +24,7 @@ const AddGenealogy = ({navigation}) => {
     navigation.goBack();
   };
   const handleCreateFamily = async () => {
-    if (!name) {
+    if (!name || !branch_name || !address || !story) {
       // Hiển thị thông báo lỗi khi thiếu thông tin
       Alert.alert(
         'Thông báo',

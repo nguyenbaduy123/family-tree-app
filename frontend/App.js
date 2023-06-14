@@ -14,6 +14,8 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import AddGenealogy from './src/screens/addGenealogy';
 import AddEvent from './src/screens/addEvent';
 import ViewProfile from './src/screens/viewProfile';
+import UpdateGenealogy from './src/screens/updateGenealogy';
+import AddPeople from './src/screens/addPeople';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -96,6 +98,16 @@ const App = () => {
           <Stack.Screen
             name="ViewProfile"
             component={ViewProfile}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="UpdateGenealogy"
+            component={UpdateGenealogy}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="AddPeople"
+            component={AddPeople}
             options={{headerShown: false}}
           />
         </Stack.Navigator>
