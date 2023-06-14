@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {colors} from '../../../utils/color';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 export const styles = StyleSheet.create({
   eventContainer: {
@@ -42,21 +42,21 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     backgroundColor: 'white',
     borderRadius: 20,
-    marginTop: 12
+    marginTop: 12,
   },
   timerText: {
     flexDirection: 'column',
     justifyContent: 'space-evenly',
     alignItems: 'center',
     fontSize: 16,
-    marginVertical: 5
+    marginVertical: 5,
   },
   timerNumber: {
     color: colors.orange,
   },
   textFontsize: {
     fontSize: 18,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   calender: {
     marginTop: 15,
@@ -74,8 +74,7 @@ export const styles = StyleSheet.create({
   calenderMain: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    marginTop: 10
-    
+    marginTop: 10,
   },
   calenderFontLastLine: {
     fontSize: 8,
@@ -85,5 +84,5 @@ export const styles = StyleSheet.create({
   },
   calenderMainDay: {
     marginBottom: 5,
-  }
+  },
 });

@@ -5,30 +5,22 @@ export const styles = StyleSheet.create({
   container: {
     padding: 20,
   },
-  buttonContainer: {
-    flex: 1,
-    alignItems: 'flex-end',
-    justifyContent: 'flex-end',
-    marginRight: 0,
-    marginBottom: 20,
-  },
-  button: {
-    width: 90,
-    height: 40,
-    backgroundColor: colors.orange,
+  avatarHandleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-evenly',
-    borderRadius: 14,
     marginBottom: 20,
   },
-  icon: {
-    width: 16,
-    height: 16,
+  avatarContainer: {
+    marginHorizontal: 10,
   },
-  buttonText: {
-    fontWeight: 'bold',
+  avatar: {
+    width: 90,
+    height: 90,
+  },
+  textChangeAvatar: {
     fontSize: 18,
+    textDecorationLine: 'underline',
+    marginTop: 40,
   },
   labelname: {
     marginVertical: 4,
@@ -36,7 +28,7 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
   },
-  selectContainer: {
+  selectSex: {
     borderWidth: 1,
     borderColor: colors.grey,
     borderRadius: 14,
@@ -46,7 +38,7 @@ export const styles = StyleSheet.create({
     height: 50,
     fontWeight: 'bold',
   },
-  buttonSelectDateContainer: {
+  selectBirthdayContainer: {
     borderWidth: 1,
     borderColor: colors.grey,
     borderRadius: 14,
@@ -54,12 +46,12 @@ export const styles = StyleSheet.create({
     height: 50,
     marginBottom: 10,
   },
-  buttonSelectDate: {
+  buttonSelectBirthday: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  textSelectDate: {
+  textSelectBirthday: {
     textAlign: 'center',
     justifyContent: 'center',
     alignItems: 'center',
@@ -72,5 +64,29 @@ export const styles = StyleSheet.create({
     height: 30,
     marginRight: 12,
     marginTop: 10,
+  },
+  buttonContainer: {
+    flex: 1,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+    marginBottom: 30,
+    marginRight: 0,
+  },
+  button: {
+    width: 90,
+    height: 40,
+    backgroundColor: colors.orange,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    borderRadius: 14,
+  },
+  icon: {
+    width: 16,
+    height: 16,
+  },
+  buttonText: {
+    fontWeight: 'bold',
+    fontSize: 18,
   },
 });
