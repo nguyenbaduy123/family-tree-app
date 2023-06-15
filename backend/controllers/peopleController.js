@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken')
 
-require('dotenv').config()
 const People = require('../models/People')
 
 const person = new People()

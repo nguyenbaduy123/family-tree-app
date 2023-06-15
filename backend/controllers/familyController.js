@@ -1,4 +1,3 @@
-require('dotenv').config()
 const Family = require('../models/Family')
 const family = new Family()
 

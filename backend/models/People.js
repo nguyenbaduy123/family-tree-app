@@ -27,17 +27,21 @@ const personSchema = Joi.object({
 })
 
 class People {
-  createPerson = (personData) => {
+  createPerson = async (personData) => {
     const data = {
       ..._.pick(personData, Object.keys(personSchema.describe().keys)),
       id: uuidv4(),
     }
     const { error, value } = personSchema.validate(data)
     if (error) {
-      return { success: false, message: error.details[0].message }
+      return {
+        success: false,
+        statusCode: 500,
+        message: error.details[0].message,
+      }
     }
     try {
-      const person = knex('people').insert(value).returning('*')
+      const person = await knex('people').insert(value).returning('*')
       return {
         success: true,
         message: 'Person created successfully',

@@ -1,7 +1,6 @@
 const _ = require('lodash')
 const Joi = require('joi')
 const knex = require('../config/connection')
-const _ = require('lodash')
 const { v4: uuidv4 } = require('uuid')
 
 const familySchema = Joi.object({
@@ -32,6 +31,7 @@ class Family {
         family: family,
       }
     } catch (error) {
+      console.log('Create family error: ', error)
       return { success: false, message: 'Failed to create family' }
     }
   }
