@@ -48,4 +48,18 @@ export const styles = StyleSheet.create({
   textPeople: {
     fontSize: 12,
   },
+
+  //chatGPT
+  familyTree: {
+    marginTop: 20,
+  },
+  person: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  addButton: {
+    marginLeft: 10,
+    color: 'blue',
+  },
 });
