@@ -32,6 +32,7 @@ class People {
       ..._.pick(personData, Object.keys(personSchema.describe().keys)),
       id: uuidv4(),
     }
+
     const { error, value } = personSchema.validate(data)
     if (error) {
       return {
@@ -40,7 +41,22 @@ class People {
         message: error.details[0].message,
       }
     }
+
     try {
+      const family = await knex('families')
+        .select('*')
+        .where('id', value.family_id)
+        .andWhere('owner_id', value.created_by_id)
+        .first()
+
+      if (!family) {
+        return {
+          success: false,
+          message: 'You do not have permission for this family',
+          statusCode: 401,
+        }
+      }
+
       const person = await knex('people').insert(value).returning('*')
       return {
         success: true,

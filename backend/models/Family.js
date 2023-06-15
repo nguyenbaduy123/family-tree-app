@@ -19,6 +19,7 @@ class Family {
       id: uuidv4(),
     }
     const { error, value } = familySchema.validate(data)
+
     if (error) {
       return { success: false, message: error.details[0].message }
     }
@@ -33,6 +34,20 @@ class Family {
     } catch (error) {
       console.log('Create family error: ', error)
       return { success: false, message: 'Failed to create family' }
+    }
+  }
+
+  getFamilies = async (user_id) => {
+    try {
+      const families = await knex('families').where('owner_id', user_id)
+      return { success: true, families: families, statusCode: 200 }
+    } catch (error) {
+      console.error('Get families error: ', error)
+      return {
+        success: false,
+        statusCode: 500,
+        message: 'Failed to get family',
+      }
     }
   }
 }

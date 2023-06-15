@@ -7,7 +7,10 @@ router
   .route('/')
   .post(controller.createUser)
   .put(authentication.verifyToken, controller.updateUser)
-router.route('/:user_id').put(controller.updateUser)
+router
+  .route('/:user_id')
+  .put(controller.updateUser)
+  .get(authentication.verifyToken, controller.getUser)
 router.route('/login').post(controller.login)
 
 module.exports = router

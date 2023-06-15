@@ -33,6 +33,12 @@ const login = async (req, res) => {
   }
 }
 
+const getUser = async (req, res) => {
+  const user_id = req.customParams.user_id
+  const result = await user.getUser(user_id)
+  res.status(result.statusCode).json(result)
+}
+
 const updateUser = async (req, res) => {
   const userData = req.customParams
   const result = await user.updateUser(userData)
@@ -50,4 +56,5 @@ module.exports = {
   createUser,
   updateUser,
   login,
+  getUser,
 }

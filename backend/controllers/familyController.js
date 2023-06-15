@@ -12,4 +12,10 @@ const createFamily = async (req, res) => {
   }
 }
 
-module.exports = { createFamily }
+const getFamilies = async (req, res) => {
+  const { user_id } = req.customParams
+  const result = await family.getFamilies(user_id)
+  res.status(result.statusCode).json(result)
+}
+
+module.exports = { createFamily, getFamilies }

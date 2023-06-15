@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 
 const verifyToken = (req, res, next) => {
+  req.customParams = { ...req.customParams, ...req.params }
   const authorization = req.headers['authorization']
   if (!authorization) {
     return res.status(401).json({ success: false, message: 'Unauthorized' })

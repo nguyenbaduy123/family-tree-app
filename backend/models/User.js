@@ -55,6 +55,19 @@ class User {
     }
   }
 
+  getUser = async (id) => {
+    try {
+      const user = await knex('users')
+        .select('username', 'email', 'full_name', 'avatar', 'phone')
+        .where('id', id)
+        .first()
+      return { success: true, user: user, statusCode: 200 }
+    } catch (error) {
+      console.error('Get user error: ', error)
+      return { success: false, message: 'Failed to get user', statusCode: 500 }
+    }
+  }
+
   updateUser = async (userData) => {
     try {
       await knex('users')
