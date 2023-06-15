@@ -1,14 +1,14 @@
-import React, {useState} from 'react';
-import {ScrollView, Text, View, Alert} from 'react-native';
-import {styles} from './styles';
+import React, { useState } from 'react';
+import { ScrollView, Text, View, Alert } from 'react-native';
+import { styles } from './styles';
 import AuthHeader from '../../../components/AuthHeader';
 import Input from '../../../components/Input';
 import Checkbox from '../../../components/Checkbox';
 import Button from '../../../components/Button';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 
-const Signup = ({navigation}) => {
+const Signup = ({ navigation }) => {
   const [checked, setChecked] = useState(false);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -28,13 +28,13 @@ const Signup = ({navigation}) => {
       Alert.alert(
         'Thông báo',
         'Vui lòng điền đầy đủ thông tin để đăng ký tài khoản!',
-        [{text: 'OK'}],
-        {cancelable: false},
+        [{ text: 'OK' }],
+        { cancelable: false },
       );
       return;
     }
     try {
-      const response = await axios.post(`http://172.21.144.1:2222/api/users`, {
+      const response = await axios.post(`http://192.168.1.5:2222/api/users`, {
         username: username,
         email: email,
         password: password,
@@ -50,7 +50,7 @@ const Signup = ({navigation}) => {
             },
           },
         ],
-        {cancelable: false},
+        { cancelable: false },
       );
     } catch (error) {
       console.error(error);
