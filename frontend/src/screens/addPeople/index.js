@@ -7,7 +7,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import AuthHeader from '../../components/AuthHeader';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-const ViewProfile = ({navigation}) => {
+const AddPeople = ({navigation}) => {
   const onBack = () => {
     navigation.goBack();
   };
@@ -18,7 +18,6 @@ const ViewProfile = ({navigation}) => {
   const handleValueChange = itemValue => {
     setSelectedValue(itemValue);
   };
-
   const [selectedBirthday, setSelectedBirthday] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const handleBirthdayChange = (event, date) => {
@@ -30,11 +29,11 @@ const ViewProfile = ({navigation}) => {
   const openDatePicker = () => {
     setShowDatePicker(true);
   };
-
   return (
     <SafeAreaView>
       <ScrollView style={styles.container}>
-        <AuthHeader onBackPress={onBack} title="Thông tin cá nhân" />
+        <AuthHeader onBackPress={onBack} title="Cập nhật người trong gia phả" />
+        <Text style={styles.labelname}>Thông tin cá nhân:</Text>
         <View style={styles.avatarHandleContainer}>
           <View style={styles.avatarContainer}>
             <Image
@@ -46,15 +45,12 @@ const ViewProfile = ({navigation}) => {
             Thay đổi ảnh đại diện
           </Text>
         </View>
-        <Input label="Họ*" placeholder="Họ" />
-        <Input label="Tên đệm" placeholder="Tên đệm" />
-        <Input label="Tên*" placeholder="Tên" />
         <Input
-          label="Biệt danh, tên gợi nhớ"
-          placeholder="Nhập biệt danh, tên ở nhà"
+          label="Vai vế (hiện trên phả hệ)"
+          placeholder="Ông, Cụ, Bà, Chi trưởng, Thủy tổ, Thứ..."
         />
-        <Input label="Số điện thoại" placeholder="Số điện thoại" />
-        <Input label="Email*" placeholder="Email đã đăng ký tài khoản" />
+        <Input label="Họ và tên" placeholder="Họ tên" />
+        <Input label="Tên khác(nếu có)" placeholder="Biệt danh, hiệu..." />
         <Text style={styles.labelname}>Giới tính</Text>
         <View style={styles.selectSex}>
           <Picker
@@ -66,6 +62,8 @@ const ViewProfile = ({navigation}) => {
             <Picker.Item label="Khác" value="Khác" />
           </Picker>
         </View>
+        <Input label="Trình độ" placeholder="Học vấn, kỹ năng..." />
+        <Input label="Nghề nghiệp" placeholder="Nghề, chức..." />
         <Text style={styles.labelname}>Ngày sinh</Text>
         <View style={styles.selectBirthdayContainer}>
           <TouchableOpacity
@@ -90,7 +88,9 @@ const ViewProfile = ({navigation}) => {
             />
           )}
         </View>
-        <Input label="Địa chỉ" placeholder="Nhập địa chỉ của bạn" />
+        <Input label="Nguyên quán" placeholder="Nhập nguyên quán" />
+        <Input label="Địa chỉ hiện tại" placeholder="Nhập địa chỉ hiện tại" />
+        <Input label="Số điện thoại" placeholder="Nhập số điện thoại" />
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button}>
             <Image
@@ -105,4 +105,4 @@ const ViewProfile = ({navigation}) => {
   );
 };
 
-export default ViewProfile;
+export default AddPeople;

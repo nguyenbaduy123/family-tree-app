@@ -5,6 +5,23 @@ export const styles = StyleSheet.create({
   container: {
     padding: 20,
   },
+  avatarHandleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  avatarContainer: {
+    marginHorizontal: 10,
+  },
+  avatar: {
+    width: 90,
+    height: 90,
+  },
+  textChangeAvatar: {
+    fontSize: 18,
+    textDecorationLine: 'underline',
+    marginTop: 40,
+  },
   labelname: {
     marginVertical: 4,
     color: colors.blue,
@@ -21,26 +38,6 @@ export const styles = StyleSheet.create({
     height: 50,
     fontWeight: 'bold',
   },
-  selectBirthday: {},
-  selectDay: {
-    borderWidth: 1,
-    borderColor: colors.grey,
-    borderRadius: 14,
-    marginBottom: 14,
-  },
-  selectMonth: {
-    borderWidth: 1,
-    borderColor: colors.grey,
-    borderRadius: 14,
-    marginBottom: 14,
-  },
-  selectYear: {
-    borderWidth: 1,
-    borderColor: colors.grey,
-    borderRadius: 14,
-    marginBottom: 14,
-  },
-
   buttonContainer: {
     flex: 1,
     alignItems: 'flex-end',
@@ -64,5 +61,32 @@ export const styles = StyleSheet.create({
   buttonText: {
     fontWeight: 'bold',
     fontSize: 18,
+  },
+  selectBirthdayContainer: {
+    borderWidth: 1,
+    borderColor: colors.grey,
+    borderRadius: 14,
+    width: '100%',
+    height: 50,
+    marginBottom: 10,
+  },
+  buttonSelectBirthday: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  textSelectBirthday: {
+    textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: 14,
+    marginLeft: 12,
+    marginTop: 10,
+  },
+  calendarIcon: {
+    width: 30,
+    height: 30,
+    marginRight: 12,
+    marginTop: 10,
   },
 });
