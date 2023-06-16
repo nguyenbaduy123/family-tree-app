@@ -1,18 +1,43 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image, Text, TouchableOpacity, View, Alert} from 'react-native';
 import {styles} from './styles';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Input from '../../../components/Input';
+import {BASE_URL} from '../../../../env_variable';
 
 const Account = ({navigation}) => {
+  const [username, setUsername] = useState('');
+  const [full_name, setFull_name] = useState('');
+  const fetchData = async () => {
+    const user_id = await AsyncStorage.getItem('user_id');
+    const token = await AsyncStorage.getItem('token');
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/users/${user_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      setUsername(response.data.user.username);
+      setFull_name(response.data.user.full_name);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const ViewProfile = () => {
     navigation.navigate('ViewProfile');
   };
   const handleLogout = () => {
     Alert.alert(
-      'Xác nhận đăng xuất',
-      'Bạn có chắc chắn muốn đăng xuất không?',
+      'Bạn có muốn đăng xuất?',
+      'Tài khoản của bạn sẽ được đăng xuất khỏi ứng dụng trên thiết bị này',
       [
         {
           text: 'Hủy',
@@ -33,7 +58,7 @@ const Account = ({navigation}) => {
   const DeleteAccount = () => {
     Alert.alert(
       'Bạn muốn xóa tài khoản vĩnh viễn?',
-      '- Yêu cầu của bạn sẽ được thực hiện trong 7 ngày. Trong quá trình này bạn vẫn có thể truy xuất dữ liệu để thực hiện sao chép thủ công trước khi quá trình xóa tài khoản hoàn tất. Bạn có thể hủy yêu cầu xóa tài khoản trong thời gian chờ.',
+      'Yêu cầu của bạn sẽ được thực hiện trong 7 ngày. Trong quá trình này bạn vẫn có thể truy xuất dữ liệu để thực hiện sao chép thủ công trước khi quá trình xóa tài khoản hoàn tất. Bạn có thể hủy yêu cầu xóa tài khoản trong thời gian chờ.',
       [
         {
           text: 'Hủy',
@@ -59,8 +84,8 @@ const Account = ({navigation}) => {
           />
         </View>
         <View style={styles.textInfoContainer}>
-          <Text style={styles.textInfoName}>Nguyễn Văn Hiển</Text>
-          <Text style={styles.textInfoOther}>Hiển 21 tuổi</Text>
+          <Text style={styles.textInfoName}>UserName: {username}</Text>
+          <Text style={styles.textInfoOther}>{full_name} 21 tuổi</Text>
         </View>
       </View>
       <View style={styles.mainContainer}>

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {Image, ScrollView, Text, TouchableOpacity, View, Alert} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import {styles} from './styles';
 import Input from '../../components/Input';
@@ -10,7 +10,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BASE_URL} from '../../../env_variable';
 
-const ViewProfile = ({navigation}) => {
+const UpdateProfile = ({navigation}) => {
   const onBack = () => {
     navigation.goBack();
   };
@@ -34,10 +34,8 @@ const ViewProfile = ({navigation}) => {
     setShowDatePicker(true);
   };
 
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [full_name, setFull_name] = useState('');
+  //update
+  const [data, setData] = useState([]);
   const fetchData = async () => {
     const user_id = await AsyncStorage.getItem('user_id');
     const token = await AsyncStorage.getItem('token');
@@ -50,10 +48,11 @@ const ViewProfile = ({navigation}) => {
           },
         },
       );
-      setUsername(response.data.user.username);
-      setEmail(response.data.user.email);
-      setPhone(response.data.user.phone);
-      setFull_name(response.data.user.full_name);
+      setData(response.data.user);
+      setUpdateData({
+        full_name: response.data.user.full_name,
+        phone: response.data.user.phone,
+      });
     } catch (error) {
       console.error(error);
     }
@@ -62,31 +61,80 @@ const ViewProfile = ({navigation}) => {
     fetchData();
   }, []);
 
-  const onUpdateProfile = () => {
-    navigation.navigate('UpdateProfile');
+  const [updateData, setUpdateData] = useState({
+    full_name: '',
+    phone: '',
+  });
+  const handleUpdateProfile = async () => {
+    try {
+      const {full_name, phone} = updateData;
+      const user_id = await AsyncStorage.getItem('user_id');
+      const token = await AsyncStorage.getItem('token');
+      await axios.put(
+        `${BASE_URL}/users?user_id=${user_id}`,
+        {
+          full_name,
+          phone,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      fetchData();
+      Alert.alert(
+        'Chúc mừng',
+        'Bạn đã cập nhật thông tin cá nhân thành công!',
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              navigation.navigate('Tài khoản');
+            },
+          },
+        ],
+        {cancelable: false},
+      );
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <SafeAreaView>
       <ScrollView style={styles.container}>
-        <AuthHeader onBackPress={onBack} title="Thông tin cá nhân" />
-        <View style={styles.avatarContainer}>
-          <Image
-            style={styles.avatar}
-            source={require('../../assets/tabs/avatar.jpg')}
-          />
+        <AuthHeader onBackPress={onBack} title="Cập nhật thông tin cá nhân" />
+        <View style={styles.avatarHandleContainer}>
+          <View style={styles.avatarContainer}>
+            <Image
+              style={styles.avatar}
+              source={require('../../assets/tabs/avatar.jpg')}
+            />
+          </View>
+          <Text style={styles.textChangeAvatar} onPress={handleChangeAvatar}>
+            Thay đổi ảnh đại diện
+          </Text>
         </View>
-        <Input label="Username:" placeholder="User name" value={username} />
+        <Input label="Username:" placeholder="User name" value={data.username} />
         <Input
           label="Email*"
           placeholder="Email đã đăng ký tài khoản"
-          value={email}
+          value={data.email}
         />
-        <Input label="Fullname:" placeholder="Full name" value={full_name} />
+        <Input
+          label="Fullname:"
+          placeholder="Full name"
+          value={updateData.full_name}
+          onChangeText={value =>
+            setUpdateData({...updateData, full_name: value})
+          }
+        />
         <Input
           label="Số điện thoại"
           placeholder="Số điện thoại"
-          value={phone}
+          value={updateData.phone}
+          onChangeText={value => setUpdateData({...updateData, phone: value})}
         />
         <Text style={styles.labelname}>Giới tính</Text>
         <View style={styles.selectSex}>
@@ -126,8 +174,16 @@ const ViewProfile = ({navigation}) => {
         <Input label="Địa chỉ" placeholder="Nhập địa chỉ của bạn" />
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button}>
-            <Text onPress={onUpdateProfile} style={styles.buttonText}>
-              Click vào đây để cập nhật thông tin cá nhân.
+            <Image
+              style={styles.icon}
+              source={require('../../assets/tabs/save_icon.png')}
+            />
+            <Text
+              style={styles.buttonText}
+              onPress={() =>
+                handleUpdateProfile()
+              }>
+              Save Changes
             </Text>
           </TouchableOpacity>
         </View>
@@ -136,4 +192,4 @@ const ViewProfile = ({navigation}) => {
   );
 };
 
-export default ViewProfile;
+export default UpdateProfile;
