@@ -13,7 +13,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import AuthHeader from '../../components/AuthHeader';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {BASE_URL} from '../../../env_variable';
+import {BASE_URL} from '../../../../env_variable';
 
 const AddGenealogy = ({navigation}) => {
   const [name, setName] = useState('');
