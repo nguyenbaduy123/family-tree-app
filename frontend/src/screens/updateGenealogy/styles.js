@@ -53,13 +53,46 @@ export const styles = StyleSheet.create({
   familyTree: {
     marginTop: 20,
   },
-  person: {
-    flexDirection: 'row',
+  containerr: {
+    flex: 1,
     alignItems: 'center',
-    marginBottom: 10,
+    justifyContent: 'center',
+    padding: 16,
+  },
+  person: {
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  personName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    width: '100%',
   },
   addButton: {
-    marginLeft: 10,
-    color: 'blue',
+    marginHorizontal: 4,
+    backgroundColor: 'green',
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  deleteButton: {
+    marginHorizontal: 4,
+    backgroundColor: 'red',
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  childrenContainer: {
+    marginLeft: 32,
   },
 });

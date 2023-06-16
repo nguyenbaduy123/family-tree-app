@@ -16,6 +16,7 @@ import AddEvent from './src/screens/addEvent';
 import ViewProfile from './src/screens/viewProfile';
 import UpdateGenealogy from './src/screens/updateGenealogy';
 import AddPeople from './src/screens/addPeople';
+import UpdateProfile from './src/screens/updateProfile';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -91,6 +92,11 @@ const App = () => {
             options={{headerShown: false}}
           />
           <Stack.Screen
+            name="UpdateGenealogy"
+            component={UpdateGenealogy}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
             name="AddEvent"
             component={AddEvent}
             options={{headerShown: false}}
@@ -101,8 +107,8 @@ const App = () => {
             options={{headerShown: false}}
           />
           <Stack.Screen
-            name="UpdateGenealogy"
-            component={UpdateGenealogy}
+            name="UpdateProfile"
+            component={UpdateProfile}
             options={{headerShown: false}}
           />
           <Stack.Screen
