@@ -1,35 +1,33 @@
 import React, {useEffect, useState} from 'react';
 import {Image, Text, TouchableOpacity, View, Alert} from 'react-native';
 import {styles} from './styles';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BASE_URL} from '../../../../env_variable';
 
 const Account = ({navigation}) => {
-  const [username, setUsername] = useState('');
-  const [full_name, setFull_name] = useState('');
+  const [data, setData] = useState('');
   const fetchData = async () => {
     const user_id = await AsyncStorage.getItem('user_id');
     const token = await AsyncStorage.getItem('token');
     try {
-      const response = await axios.get(
-        `${BASE_URL}/users/${user_id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await axios.get(`${BASE_URL}/users/${user_id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
-      setUsername(response.data.user.username);
-      setFull_name(response.data.user.full_name);
+      });
+      setData(response.data.user);
     } catch (error) {
       console.error(error);
     }
   };
   useEffect(() => {
-    fetchData();
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchData();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   const ViewProfile = () => {
     navigation.navigate('ViewProfile');
@@ -84,8 +82,8 @@ const Account = ({navigation}) => {
           />
         </View>
         <View style={styles.textInfoContainer}>
-          <Text style={styles.textInfoName}>UserName: {username}</Text>
-          <Text style={styles.textInfoOther}>{full_name} 21 tuổi</Text>
+          <Text style={styles.textInfoName}>UserName: {data.username}</Text>
+          <Text style={styles.textInfoOther}>{data.full_name} 21 tuổi</Text>
         </View>
       </View>
       <View style={styles.mainContainer}>

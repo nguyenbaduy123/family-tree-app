@@ -11,12 +11,12 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {colors} from './src/utils/color';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import AddGenealogy from './src/screens/addGenealogy';
 import AddEvent from './src/screens/addEvent';
-import ViewProfile from './src/screens/viewProfile';
-import UpdateGenealogy from './src/screens/updateGenealogy';
-import AddPeople from './src/screens/addPeople';
-import UpdateProfile from './src/screens/updateProfile';
+import AddGenealogy from './src/screens/genealogy/addGenealogy';
+import UpdateGenealogy from './src/screens/genealogy/updateGenealogy';
+import UpdateProfile from './src/screens/profile/updateProfile';
+import ViewProfile from './src/screens/profile/viewProfile';
+import AddPeople from './src/screens/genealogy/addPeople';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
