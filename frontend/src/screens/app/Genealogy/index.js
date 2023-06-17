@@ -2,7 +2,6 @@ import React from 'react';
 import {Image, ScrollView, Text, View, TouchableOpacity} from 'react-native';
 import {styles} from './styles';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import addGenealogy from '../../addGenealogy';
 
 const Genealogy = ({navigation}) => {
   const onCreate = () => {

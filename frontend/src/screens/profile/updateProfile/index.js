@@ -9,9 +9,9 @@ import {
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import {styles} from './styles';
-import Input from '../../components/Input';
+import Input from '../../../components/Input';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import AuthHeader from '../../components/AuthHeader';
+import AuthHeader from '../../../components/AuthHeader';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -117,7 +117,7 @@ const UpdateProfile = ({navigation}) => {
           <View style={styles.avatarContainer}>
             <Image
               style={styles.avatar}
-              source={require('../../assets/tabs/avatar.jpg')}
+              source={require('../../../assets/tabs/avatar.jpg')}
             />
           </View>
           <Text style={styles.textChangeAvatar} onPress={handleChangeAvatar}>
@@ -171,7 +171,7 @@ const UpdateProfile = ({navigation}) => {
             </Text>
             <Image
               style={styles.calendarIcon}
-              source={require('../../assets/tabs/calendar_icon.jpg')}
+              source={require('../../../assets/tabs/calendar_icon.jpg')}
             />
           </TouchableOpacity>
           {showDatePicker && (
@@ -188,7 +188,7 @@ const UpdateProfile = ({navigation}) => {
           <TouchableOpacity style={styles.button}>
             <Image
               style={styles.icon}
-              source={require('../../assets/tabs/save_icon.png')}
+              source={require('../../../assets/tabs/save_icon.png')}
             />
             <Text
               style={styles.buttonText}

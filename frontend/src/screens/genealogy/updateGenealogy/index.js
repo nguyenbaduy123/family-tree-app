@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {ScrollView, TouchableOpacity, Image, Text, View} from 'react-native';
 import {styles} from './styles';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import AuthHeader from '../../components/AuthHeader';
+import AuthHeader from '../../../components/AuthHeader';
 
 const UpdateGenealogy = ({navigation}) => {
   const onBack = () => {
@@ -160,7 +160,7 @@ const UpdateGenealogy = ({navigation}) => {
   //         onPress={onCreatePeople}>
   //         <Image
   //           style={styles.avatarPeople}
-  //           source={require('../../assets/tabs/avatar.jpg')}
+  //           source={require('../../../assets/tabs/avatar.jpg')}
   //         />
   //         <Text style={styles.textPeople}>Chưa cập nhật</Text>
   //       </TouchableOpacity>
@@ -185,7 +185,7 @@ const UpdateGenealogy = ({navigation}) => {
   //         onPress={() => onCreatePeople(person.id, 'right')}>
   //         <Image
   //           style={styles.avatarPeople}
-  //           source={require('../../assets/tabs/avatar.jpg')}
+  //           source={require('../../../assets/tabs/avatar.jpg')}
   //         />
   //         <Text style={styles.textPeople}>Chưa cập nhật</Text>
   //       </TouchableOpacity>
@@ -221,7 +221,7 @@ const UpdateGenealogy = ({navigation}) => {
           <TouchableOpacity style={styles.buttonGuide} onPress={handleGuide}>
             <Image
               style={styles.icon}
-              source={require('../../assets/tabs/guide_icon.png')}
+              source={require('../../../assets/tabs/guide_icon.png')}
             />
             <Text style={styles.textButton}>Hướng dẫn</Text>
           </TouchableOpacity>
