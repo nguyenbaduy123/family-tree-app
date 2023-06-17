@@ -2,9 +2,9 @@ import React, {useEffect, useState} from 'react';
 import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import {styles} from './styles';
-import Input from '../../components/Input';
+import Input from '../../../components/Input';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import AuthHeader from '../../components/AuthHeader';
+import AuthHeader from '../../../components/AuthHeader';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -67,7 +67,7 @@ const ViewProfile = ({navigation}) => {
         <View style={styles.avatarContainer}>
           <Image
             style={styles.avatar}
-            source={require('../../assets/tabs/avatar.jpg')}
+            source={require('../../../assets/tabs/avatar.jpg')}
           />
         </View>
         <Input
@@ -113,7 +113,7 @@ const ViewProfile = ({navigation}) => {
             </Text>
             <Image
               style={styles.calendarIcon}
-              source={require('../../assets/tabs/calendar_icon.jpg')}
+              source={require('../../../assets/tabs/calendar_icon.jpg')}
             />
           </TouchableOpacity>
           {showDatePicker && (

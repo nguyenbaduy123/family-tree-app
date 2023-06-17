@@ -8,9 +8,9 @@ import {
   Alert,
 } from 'react-native';
 import {styles} from './styles';
-import Input from '../../components/Input';
+import Input from '../../../components/Input';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import AuthHeader from '../../components/AuthHeader';
+import AuthHeader from '../../../components/AuthHeader';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BASE_URL} from '../../../../env_variable';
@@ -104,7 +104,7 @@ const AddGenealogy = ({navigation}) => {
             onPress={() => handleCreateFamily()}>
             <Image
               style={styles.icon}
-              source={require('../../assets/tabs/save_icon.png')}
+              source={require('../../../assets/tabs/save_icon.png')}
             />
             <Text style={styles.buttonText}>Save</Text>
           </TouchableOpacity>
