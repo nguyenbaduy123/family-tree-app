@@ -14,9 +14,7 @@ const ViewProfile = ({navigation}) => {
   const onBack = () => {
     navigation.goBack();
   };
-  const handleChangeAvatar = () => {
-    console.log('Ok đang thay đổi ảnh đại diện cho mày đây');
-  };
+  
   const [selectedValue, setSelectedValue] = useState('Khác');
   const handleValueChange = itemValue => {
     setSelectedValue(itemValue);

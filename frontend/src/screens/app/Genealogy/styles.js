@@ -35,16 +35,23 @@ export const styles = StyleSheet.create({
   },
   container: {
     padding: 16,
-    marginTop: 8,
     height: '100%',
+    flexGrow: 1,
+  },
+  contentContainer: {
+    paddingBottom: 10,
   },
 
+  //nếu có families
   infoGenealogyContainer: {
     width: '100%',
     height: 206,
     borderColor: colors.lightGrey,
     borderWidth: 1,
     borderRadius: 10,
+    marginTop: 0,
+    marginBottom: 100,
+    flexGrow: 1,
   },
   view1: {
     width: '100%',
@@ -137,14 +144,15 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 
-  // image: {
-  //   width: '100%',
-  //   height: 300,
-  // },
-  // text: {
-  //   textAlign: 'center',
-  // },
-  // textLink: {
-  //   fontWeight: 'bold',
-  // },
+  //nếu k có family
+  image: {
+    width: '100%',
+    height: 300,
+  },
+  text: {
+    textAlign: 'center',
+  },
+  textLink: {
+    fontWeight: 'bold',
+  },
 });
