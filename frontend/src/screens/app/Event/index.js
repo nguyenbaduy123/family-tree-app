@@ -1,15 +1,35 @@
-import React from 'react';
-import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
-import {styles} from './styles';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import React, { useState } from 'react';
+import { Image, ScrollView, Text, TouchableOpacity, View, Modal } from 'react-native';
+import { styles } from './styles';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import CalendarStrip from 'react-native-calendar-strip';
 
-const Event = ({navigation}) => {
+
+const Event = ({ navigation }) => {
   const onCreate = () => {
     navigation.navigate('AddEvent');
   };
+  const [calendar, setCalendar] = useState(false);
+  let date = new Date().getDate(); //Current Date
+  let month = new Date().getMonth() + 1; //Current Month
+  let year = new Date().getFullYear(); //Current Year
+  let hours = new Date().getHours(); //Current Hours
+  let min = new Date().getMinutes()
+  const [showModal, setShowModal] = useState(false);
+  const minplus = () => {
+    if (min < 10) {
+      return '0' + min;
+    }
+    else {
+      return min;
+    }
+  }
+  let minplus1 = minplus();
+
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.eventContainer}>
+
         <View style={styles.header}>
           <Text style={styles.eventText}>Sự kiện</Text>
           <TouchableOpacity style={styles.button} onPress={onCreate}>
@@ -20,81 +40,42 @@ const Event = ({navigation}) => {
             <Text style={styles.buttonText}>Tạo sự kiện</Text>
           </TouchableOpacity>
         </View>
-        <View>
-          <TouchableOpacity activeOpacity={1} style={styles.timer}>
-              <View style={styles.timerText}>
-                <Text style={styles.textFontsize}>Gio</Text>
-                <Text style={styles.timerNumber}>12 : 25</Text>
-                <Text>Mau Ty</Text>
-              </View>
-              <View style={styles.timerText}>
-                <Text style={styles.textFontsize}>Ngay</Text>
-                <Text style={styles.timerNumber}>10</Text>
-                <Text>Binh Tuat</Text>
-              </View>
-              <View style={styles.timerText}>
-                <Text style={styles.textFontsize}>Thang</Text>
-                <Text style={styles.timerNumber}>4</Text>
-                <Text>Dinh Ty</Text>
-              </View>
-              <View style={styles.timerText}>
-                <Text style={styles.textFontsize}>Nam</Text>
-                <Text style={styles.timerNumber}>2023</Text>
-                <Text>Quy Mao</Text>
-              </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.calender}>
-            <View style={styles.calenderHeader}>
-              <Image style={[styles.icon, {transform: [{scaleX: -1}]}]} source={require('../../../assets/tabs/arrow_right.png')}>
-              </Image>
-              <Text style={{fontSize: 18}}>
-                05 / 2023
-              </Text>
-              <Image style={[styles.icon]} source={require('../../../assets/tabs/arrow_right.png')}>
-              </Image>
+
+        <View style={styles.calendarContainer}>
+          <View style={styles.timer}>
+            <View style={styles.timerHour}>
+              <Text style={{ fontSize: 18 }}>Giờ</Text>
+              <Text style={{ color: '#FF7E06', fontSize: 16 }}>{hours} : {minplus1}</Text>
             </View>
-            <View style={styles.calenderMain}>
-              <View style={styles.calenderText}>
-                <Text style={styles.calenderMainDay}>CN</Text>
-                <Text>28</Text>
-                <Text style={styles.calenderFontLastLine}>10</Text>
-              </View>
-              <View style={styles.calenderText}>
-                <Text style={styles.calenderMainDay}>T2</Text>
-                <Text>29</Text>
-                <Text style={styles.calenderFontLastLine}>11</Text>
-              </View> 
-              <View style={styles.calenderText}>
-                <Text style={styles.calenderMainDay}>T3</Text>
-                <Text>30</Text>
-                <Text style={styles.calenderFontLastLine}>12</Text>
-              </View> 
-              <View style={styles.calenderText}>
-                <Text style={styles.calenderMainDay}>T4</Text>
-                <Text>31</Text>
-                <Text style={styles.calenderFontLastLine}>13</Text>
-              </View> 
-              <View style={styles.calenderText}>
-                <Text style={styles.calenderMainDay}>T5</Text>
-                <Text>1</Text>
-                <Text style={styles.calenderFontLastLine}>14</Text>
-              </View> 
-              <View style={styles.calenderText}>
-                <Text style={styles.calenderMainDay}>T6</Text>
-                <Text>2</Text>
-                <Text style={styles.calenderFontLastLine}>15</Text>
-              </View> 
-              <View style={styles.calenderText}>
-                <Text style={styles.calenderMainDay}>T7</Text>
-                <Text>3</Text>
-                <Text style={styles.calenderFontLastLine}>16</Text>
-              </View> 
+            <View style={styles.timerDate}>
+              <Text style={{ fontSize: 18 }}>Ngày</Text>
+              <Text style={{ color: '#FF7E06', fontSize: 16 }}>{date}</Text>
             </View>
-          </TouchableOpacity>
+            <View style={styles.timerMonth}>
+              <Text style={{ fontSize: 18 }}>Tháng</Text>
+              <Text style={{ color: '#FF7E06', fontSize: 16 }}>{month}</Text>
+            </View>
+            <View style={styles.timerYear}>
+              <Text style={{ fontSize: 18 }}>Năm</Text>
+              <Text style={{ color: '#FF7E06', fontSize: 16 }}>{year}</Text>
+            </View>
+          </View>
+          <View style={styles.viewCalendar}>
+            <CalendarStrip
+              style={styles.calendar}
+              calendarColor={'#FFF3D6'}
+              calendarHeaderStyle={{ color: 'black', paddingBottom: 20 }}
+              dateNumberStyle={{ color: 'black' }}
+              dateNameStyle={{ color: 'black' }}
+              iconContainer={{ flex: 0.0 }}
+              calendarAnimation={{ type: 'sequence', duration: 50 }}
+              daySelectionAnimation={{ type: 'background', highlightColor: '#FFBF00' }}
+            />
+          </View>
         </View>
+
       </View>
-      <View style={styles.flexibleView}>
-        <Text></Text>
+      <View style={styles.footer}>
       </View>
     </SafeAreaView>
   );
