@@ -1,15 +1,15 @@
-import React, {useState} from 'react';
-import {ScrollView, Text, Alert} from 'react-native';
-import {styles} from './styles';
+import React, { useState } from 'react';
+import { ScrollView, Text, Alert } from 'react-native';
+import { styles } from './styles';
 import AuthHeader from '../../../components/AuthHeader';
 import Input from '../../../components/Input';
 import Button from '../../../components/Button';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {BASE_URL} from '../../../../env_variable';
+import { BASE_URL } from '../../../../env_variable';
 
-const Signin = ({navigation}) => {
+const Signin = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -27,17 +27,19 @@ const Signin = ({navigation}) => {
       Alert.alert(
         'Thông báo',
         'Vui lòng điền đầy đủ thông tin để đăng nhập!',
-        [{text: 'OK'}],
-        {cancelable: false},
+        [{ text: 'OK' }],
+        { cancelable: false },
       );
       console.log(BASE_URL);
       return;
     }
     try {
+
       const response = await axios.post(`${BASE_URL}/users/login`, {
         email: email,
         password: password,
       });
+
       if (response.data?.token) {
         AsyncStorage.setItem('user_id', response.data.user.id);
         AsyncStorage.setItem('token', response.data.token);
@@ -53,7 +55,7 @@ const Signin = ({navigation}) => {
               text: 'OK',
             },
           ],
-          {cancelable: false},
+          { cancelable: false },
         );
       } else {
         console.error(error);
