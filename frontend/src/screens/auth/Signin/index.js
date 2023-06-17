@@ -30,7 +30,6 @@ const Signin = ({navigation}) => {
         [{text: 'OK'}],
         {cancelable: false},
       );
-      console.log(BASE_URL);
       return;
     }
     try {
