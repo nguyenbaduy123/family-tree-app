@@ -45,7 +45,7 @@ const Event = ({ navigation }) => {
           <View style={styles.timer}>
             <View style={styles.timerHour}>
               <Text style={{ fontSize: 18 }}>Giờ</Text>
-              <Text style={{ color: '#FF7E06', fontSize: 16 }}>{hours} : {minplus1}</Text>
+              <Text style={{ color: '#FF7E06', fontSize: 16 }}>{hours} : {min}</Text>
             </View>
             <View style={styles.timerDate}>
               <Text style={{ fontSize: 18 }}>Ngày</Text>
