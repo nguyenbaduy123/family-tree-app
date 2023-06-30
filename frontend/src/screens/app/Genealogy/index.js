@@ -15,10 +15,19 @@ const Genealogy = ({navigation}) => {
     console.log('Làm méo gì có chức năng này =)))');
   };
 
-  const handleGenealogyChange = () => {
-    navigation.navigate('UpdateGenealogy');
+  const onFamilyTree = familyId => {
+    navigation.navigate('FamilyTree', {familyId});
   };
 
+  const handleUpdateGenealogy = familyId => {
+    navigation.navigate('UpdateGenealogy', {familyId});
+  };
+
+  const handleDeteleGenealogy = () => {
+    console.log('Ok tao đang xóa cho mày đây');
+  };
+
+  //call api hiển thị family
   const [countFamily, setCountFamily] = useState(0);
   const [familyData, setFamilyData] = useState([]);
   const fetchFamilies = async () => {
@@ -87,12 +96,32 @@ const Genealogy = ({navigation}) => {
         style={styles.container}
         contentContainerStyle={styles.contentContainer}>
         {countFamily > 0 ? (
-          familyData.map((family, index) => (
-            <View style={styles.infoGenealogyContainer} key={index}>
+          familyData.map(family => (
+            <View style={styles.infoGenealogyContainer} key={family.id}>
               <View style={styles.view1}>
-                <Text style={styles.view11}>
-                  {family.name} - {family.branch_name}
-                </Text>
+                <View style={styles.view11}>
+                  <Text style={styles.view111}>
+                    {family.name} - {family.branch_name}
+                  </Text>
+                  <View style={styles.view112}>
+                    <TouchableOpacity
+                      style={styles.view112Button}
+                      onPress={() => handleUpdateGenealogy(family.id)}>
+                      <Image
+                        style={styles.view112_icon}
+                        source={require('../../../assets/tabs/edit_icon.png')}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.view112Button}
+                      onPress={() => handleDeteleGenealogy(family.id)}>
+                      <Image
+                        style={styles.view112_icon}
+                        source={require('../../../assets/tabs/delete_icon.png')}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
                 <Text style={styles.view12}>
                   Địa chỉ:
                   <Text> {family.address}</Text>
@@ -135,7 +164,7 @@ const Genealogy = ({navigation}) => {
               </View>
               <TouchableOpacity
                 style={styles.view3}
-                onPress={handleGenealogyChange}>
+                onPress={() => onFamilyTree(family.id)}>
                 <Text style={styles.view31}>Chỉnh sửa với:</Text>
                 <View style={styles.view32}>
                   <Image

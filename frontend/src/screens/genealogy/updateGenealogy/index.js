@@ -1,91 +1,49 @@
 import React, {useState} from 'react';
 import {ScrollView, TouchableOpacity, Image, Text, View} from 'react-native';
+import Input from '../../../components/Input';
 import {styles} from './styles';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import AuthHeader from '../../../components/AuthHeader';
+import {useRoute} from '@react-navigation/native';
 
 const UpdateGenealogy = ({navigation}) => {
+  const route = useRoute();
+  // Lấy familyId từ route.params (nếu không tồn tại, giá trị mặc định là null)
+  const familyId = route.params?.familyId ?? null;
+  console.log(familyId);
+  
   const onBack = () => {
     navigation.goBack();
   };
-  const handleGuide = () => {
-    console.log('Không có hướng dẫn đâu mà bấm');
-  };
-  const onCreatePeople = () => {
-    navigation.navigate('AddPeople');
+
+  const handleUpdateGenealogy = () => {};
+
+  const handleSaveChanges = () => {
+    console.log('Ok lưu rồi');
   };
 
-  const [familyTree, setFamilyTree] = useState([
-    {
-      id: 1,
-      info: 'Chưa cập nhật',
-      children: [],
-    },
-  ]);
-  const addPerson = (parentId, direction) => {
-    const newPerson = {
-      id: Date.now(),
-      children: [],
-      direction: direction,
-    };
-    setFamilyTree(prevTree => {
-      const updateTree = tree => {
-        return tree.map(person => {
-          if (person.id === parentId) {
-            return {
-              ...person,
-              children: [...person.children, newPerson],
-            };
-          }
-          return {
-            ...person,
-            children: updateTree(person.children),
-          };
-        });
-      };
-      return updateTree(prevTree);
-    });
-  };
-  const renderTree = tree => {
-    return tree.map(person => (
-      <View key={person.id} style={styles.person}>
-        <TouchableOpacity
-          style={styles.buttonPeopleContainer}
-          onPress={onCreatePeople}>
-          <Image
-            style={styles.avatarPeople}
-            source={require('../../../assets/tabs/avatar.jpg')}
-          />
-          <Text style={styles.textPeople}>Chưa cập nhật</Text>
-        </TouchableOpacity>
-        {person.children.length > 0 ? (
-          <View style={styles.childrenContainer}>
-            {renderTree(person.children)}
-          </View>
-        ) : (
-          <TouchableOpacity onPress={() => addPerson(person.id)}>
-            <Text style={styles.addButton}>+</Text>
-          </TouchableOpacity>
-        )}
-      </View>
-    ));
-  };
+  
 
   return (
     <SafeAreaView>
       <ScrollView style={styles.container}>
         <AuthHeader onBackPress={onBack} title="Chỉnh sửa gia phả" />
-        <View style={styles.headerContainer}>
-          <Text style={styles.textHeader}>Tên gia phả</Text>
-          <TouchableOpacity style={styles.buttonGuide} onPress={handleGuide}>
+        <Input label="Tên gia phả*" placeholder="Nhập tên gia phả" />
+        <Input
+          label="Tên nhánh"
+          placeholder="Tên riêng phân biệt các pha giả dòng họ"
+        />
+        <Input label="Địa chỉ" placeholder="Nhập địa chỉ" />
+        <Input label="Gia sử dòng họ" placeholder="Nhập nội dung" />
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.button} onPress={handleSaveChanges}>
             <Image
               style={styles.icon}
-              source={require('../../../assets/tabs/guide_icon.png')}
+              source={require('../../../assets/tabs/save_icon.png')}
             />
-            <Text style={styles.textButton}>Hướng dẫn</Text>
+            <Text style={styles.buttonText}>Save Changes</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.familyTree}>{renderTree(familyTree)}</View>
       </ScrollView>
     </SafeAreaView>
   );

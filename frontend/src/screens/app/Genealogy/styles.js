@@ -62,11 +62,31 @@ export const styles = StyleSheet.create({
     borderColor: colors.lightGrey,
   },
   view11: {
-    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  view111: {
+    // width: '70%',
     height: 30,
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 3,
+  },
+  view112: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 4,
+  },
+  view112Button: {
+    width: 25,
+    height: 25,
+    marginHorizontal: 6,
+  },
+  view112_icon: {
+    width: 20,
+    height: 20,
   },
   view12: {
     width: '100%',

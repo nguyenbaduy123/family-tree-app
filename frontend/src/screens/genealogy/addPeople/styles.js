@@ -34,6 +34,12 @@ export const styles = StyleSheet.create({
     borderRadius: 14,
     marginBottom: 14,
   },
+  selectBloodGroup: {
+    borderWidth: 1,
+    borderColor: colors.grey,
+    borderRadius: 14,
+    marginBottom: 14,
+  },
   select: {
     height: 50,
     fontWeight: 'bold',
@@ -64,6 +70,15 @@ export const styles = StyleSheet.create({
     height: 30,
     marginRight: 12,
     marginTop: 10,
+  },
+  radioButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+  },
+  abc: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   buttonContainer: {
     flex: 1,

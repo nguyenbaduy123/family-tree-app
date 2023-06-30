@@ -17,6 +17,7 @@ import UpdateGenealogy from './src/screens/genealogy/updateGenealogy';
 import UpdateProfile from './src/screens/profile/updateProfile';
 import ViewProfile from './src/screens/profile/viewProfile';
 import AddPeople from './src/screens/genealogy/addPeople';
+import FamilyTree from './src/screens/genealogy/familyTree';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -94,6 +95,11 @@ const App = () => {
           <Stack.Screen
             name="UpdateGenealogy"
             component={UpdateGenealogy}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="FamilyTree"
+            component={FamilyTree}
             options={{headerShown: false}}
           />
           <Stack.Screen

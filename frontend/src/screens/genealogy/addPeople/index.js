@@ -1,11 +1,22 @@
-import React, {useState} from 'react';
-import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+  Alert,
+} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import {styles} from './styles';
 import Input from '../../../components/Input';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import AuthHeader from '../../../components/AuthHeader';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import {RadioButton, Checkbox} from 'react-native-paper';
+import axios from 'axios';
+import {BASE_URL} from '../../../../env_variable';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AddPeople = ({navigation}) => {
   const onBack = () => {
@@ -14,21 +25,153 @@ const AddPeople = ({navigation}) => {
   const handleChangeAvatar = () => {
     console.log('Ok đang thay đổi ảnh đại diện cho mày đây');
   };
-  const [selectedValue, setSelectedValue] = useState('Khác');
-  const handleValueChange = itemValue => {
-    setSelectedValue(itemValue);
+
+  //xử lý select giới tính
+  const [selectedGender, setSelectedGender] = useState('Khác');
+  const handleGenderChange = itemValue => {
+    setSelectedGender(itemValue);
   };
+
+  //xử lý select nhóm máu
+  const [selectedBloodGroup, setSelectedBloodGroup] = useState('Khác');
+  const handleBloodGroupChange = itemValue => {
+    setSelectedBloodGroup(itemValue);
+  };
+
+  //xử lý select ngày sinh
   const [selectedBirthday, setSelectedBirthday] = useState(null);
-  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showBirthdayPicker, setShowBirthdayPicker] = useState(false);
   const handleBirthdayChange = (event, date) => {
-    setShowDatePicker(false);
+    setShowBirthdayPicker(false);
     if (date !== undefined) {
       setSelectedBirthday(date);
     }
   };
-  const openDatePicker = () => {
-    setShowDatePicker(true);
+  const openBirthdayPicker = () => {
+    setShowBirthdayPicker(true);
   };
+
+  //xử lý select ngày mất
+  const [selectedDateOfDeath, setSelectedDateOfDeath] = useState(null);
+  const [showDateOfDeathPicker, setShowDateOfDeathPicker] = useState(false);
+  const [status, setStatus] = useState('alive'); // Lưu trạng thái sống/chết
+  const [is_alive, setIs_alive] = useState(true);
+  const handleStatusChange = value => {
+    setStatus(value);
+    if (value === 'dead') {
+      setSelectedDateOfDeath(null); // Reset ngày đã chết khi chọn lại trạng thái sống
+    }
+  };
+ useEffect(() => {
+   setIs_alive(status === 'alive');
+ }, [status]);
+  const handleDateOfDeathChange = (event, date) => {
+    setShowDateOfDeathPicker(false);
+    if (date !== undefined) {
+      setSelectedDateOfDeath(date);
+    }
+  };
+  const openDateOfDeathPicker = () => {
+    setShowDateOfDeathPicker(true);
+  };
+
+  //call api
+  const [full_name, setFull_name] = useState('');
+  const [citizen_id, setCitizen_id] = useState('');
+  const [role_in_family, setRole_in_family] = useState('');
+  const [home_address, setHome_address] = useState('');
+  const [current_address, setCurrent_address] = useState('');
+  const [phone, setPhone] = useState('');
+  const [story, setStory] = useState('');
+  const [generation, setGeneration] = useState();
+
+  const handleAddPeople = async () => {
+    const user_id = await AsyncStorage.getItem('user_id');
+    const token = await AsyncStorage.getItem('token');
+    const familyId = await AsyncStorage.getItem('familyId');
+
+    try {
+      if (status === 'dead') {
+        const response = await axios.post(
+          `${BASE_URL}/people?user_id=${user_id}`,
+          {
+            full_name: full_name,
+            gender: selectedGender,
+            citizen_id: citizen_id,
+            role_in_family: role_in_family,
+            blood_group: selectedBloodGroup,
+            date_of_birth: selectedBirthday,
+            home_address: home_address,
+            current_address: current_address,
+            phone: phone,
+            is_alive: is_alive,
+            date_of_death: selectedDateOfDeath,
+            story: story,
+            family_id: familyId,
+            generation: generation,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+        Alert.alert(
+          'Chúc mừng',
+          'Bạn đã thêm thành viên trong gia phả thành công!',
+          [
+            {
+              text: 'OK',
+              onPress: () => {
+                navigation.navigate('FamilyTree');
+              },
+            },
+          ],
+          {cancelable: false},
+        );
+      } else {
+        const response = await axios.post(
+          `${BASE_URL}/people?user_id=${user_id}`,
+          {
+            full_name: full_name,
+            gender: selectedGender,
+            citizen_id: citizen_id,
+            role_in_family: role_in_family,
+            blood_group: selectedBloodGroup,
+            date_of_birth: selectedBirthday,
+            home_address: home_address,
+            current_address: current_address,
+            phone: phone,
+            is_alive: is_alive,
+            story: story,
+            family_id: familyId,
+            generation: generation,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+        Alert.alert(
+          'Chúc mừng',
+          'Bạn đã thêm thành viên trong gia phả thành công!',
+          [
+            {
+              text: 'OK',
+              onPress: () => {
+                navigation.navigate('FamilyTree');
+              },
+            },
+          ],
+          {cancelable: false},
+        );
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <SafeAreaView>
       <ScrollView style={styles.container}>
@@ -45,30 +188,55 @@ const AddPeople = ({navigation}) => {
             Thay đổi ảnh đại diện
           </Text>
         </View>
+
         <Input
-          label="Vai vế (hiện trên phả hệ)"
-          placeholder="Ông, Cụ, Bà, Chi trưởng, Thủy tổ, Thứ..."
+          label="Họ và tên:"
+          placeholder="Họ tên..."
+          onChangeText={value => setFull_name(value)}
         />
-        <Input label="Họ và tên" placeholder="Họ tên" />
-        <Input label="Tên khác(nếu có)" placeholder="Biệt danh, hiệu..." />
-        <Text style={styles.labelname}>Giới tính</Text>
+
+        <Text style={styles.labelname}>Giới tính:</Text>
         <View style={styles.selectSex}>
           <Picker
-            selectedValue={selectedValue}
-            onValueChange={handleValueChange}
+            selectedValue={selectedGender}
+            onValueChange={handleGenderChange}
             style={styles.select}>
             <Picker.Item label="Nam" value="Nam" />
             <Picker.Item label="Nữ" value="Nữ" />
             <Picker.Item label="Khác" value="Khác" />
           </Picker>
         </View>
-        <Input label="Trình độ" placeholder="Học vấn, kỹ năng..." />
-        <Input label="Nghề nghiệp" placeholder="Nghề, chức..." />
-        <Text style={styles.labelname}>Ngày sinh</Text>
+
+        <Input
+          label="Số CCCD/CMND:"
+          placeholder="Vui lòng nhập số cccd..."
+          onChangeText={value => setCitizen_id(value)}
+        />
+        <Input
+          label="Vai trò, vị trí trong gia đình:"
+          placeholder="Nhập vai trò, vị trí..."
+          onChangeText={value => setRole_in_family(value)}
+        />
+
+        <Text style={styles.labelname}>Nhóm máu:</Text>
+        <View style={styles.selectBloodGroup}>
+          <Picker
+            selectedValue={selectedBloodGroup}
+            onValueChange={handleBloodGroupChange}
+            style={styles.select}>
+            <Picker.Item label="A" value="A" />
+            <Picker.Item label="B" value="B" />
+            <Picker.Item label="O" value="O" />
+            <Picker.Item label="AB" value="AB" />
+            <Picker.Item label="Khác" value="Khác" />
+          </Picker>
+        </View>
+
+        <Text style={styles.labelname}>Ngày sinh:</Text>
         <View style={styles.selectBirthdayContainer}>
           <TouchableOpacity
             style={styles.buttonSelectBirthday}
-            onPress={openDatePicker}>
+            onPress={openBirthdayPicker}>
             <Text style={styles.textSelectBirthday}>
               {selectedBirthday
                 ? selectedBirthday.toLocaleDateString()
@@ -79,7 +247,7 @@ const AddPeople = ({navigation}) => {
               source={require('../../../assets/tabs/calendar_icon.jpg')}
             />
           </TouchableOpacity>
-          {showDatePicker && (
+          {showBirthdayPicker && (
             <DateTimePicker
               value={selectedBirthday || new Date()}
               mode="date"
@@ -88,11 +256,80 @@ const AddPeople = ({navigation}) => {
             />
           )}
         </View>
-        <Input label="Nguyên quán" placeholder="Nhập nguyên quán" />
-        <Input label="Địa chỉ hiện tại" placeholder="Nhập địa chỉ hiện tại" />
-        <Input label="Số điện thoại" placeholder="Nhập số điện thoại" />
+
+        <Input
+          label="Địa chỉ thường trú:"
+          placeholder="Nhập địa chỉ thường trú..."
+          onChangeText={value => setHome_address(value)}
+        />
+        <Input
+          label="Địa chỉ hiện tại:"
+          placeholder="Nhập địa chỉ hiện tại..."
+          onChangeText={value => setCurrent_address(value)}
+        />
+        <Input
+          label="Số điện thoại:"
+          placeholder="Nhập số điện thoại..."
+          onChangeText={value => setPhone(value)}
+        />
+
+        <Text style={styles.labelname}>Tình trạng hiện nay:</Text>
+        <View>
+          <RadioButton.Group onValueChange={handleStatusChange} value={status}>
+            <View style={styles.radioButtonContainer}>
+              <View style={styles.abc}>
+                <Text>Còn sống</Text>
+                <RadioButton value="alive" />
+              </View>
+              <View style={styles.abc}>
+                <Text>Đã mất</Text>
+                <RadioButton value="dead" />
+              </View>
+            </View>
+          </RadioButton.Group>
+          {status === 'dead' && (
+            <View>
+              <Text style={styles.labelname}>Ngày mất:</Text>
+              <View style={styles.selectBirthdayContainer}>
+                <TouchableOpacity
+                  style={styles.buttonSelectBirthday}
+                  onPress={openDateOfDeathPicker}>
+                  <Text style={styles.textSelectBirthday}>
+                    {selectedDateOfDeath
+                      ? selectedDateOfDeath.toLocaleDateString()
+                      : 'Ngày mất'}
+                  </Text>
+                  <Image
+                    style={styles.calendarIcon}
+                    source={require('../../../assets/tabs/calendar_icon.jpg')}
+                  />
+                </TouchableOpacity>
+                {showDateOfDeathPicker && (
+                  <DateTimePicker
+                    value={selectedDateOfDeath || new Date()}
+                    mode="date"
+                    display="default"
+                    onChange={handleDateOfDeathChange}
+                  />
+                )}
+              </View>
+            </View>
+          )}
+        </View>
+
+        <Input
+          label="Story:"
+          placeholder="Nhập story của bạn..."
+          onChangeText={value => setStory(value)}
+        />
+        <Input
+          label="Thế hệ:"
+          placeholder="Nhập thế hệ của bạn trong gia phả..."
+          onChangeText={value => setGeneration(value)}
+        />
+
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={handleAddPeople}>
             <Image
               style={styles.icon}
               source={require('../../../assets/tabs/save_icon.png')}

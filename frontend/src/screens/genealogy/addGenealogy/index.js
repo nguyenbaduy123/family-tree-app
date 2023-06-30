@@ -73,11 +73,6 @@ const AddGenealogy = ({navigation}) => {
     <SafeAreaView>
       <ScrollView style={styles.container}>
         <AuthHeader onBackPress={onBack} title="Tạo gia phả mới" />
-        {/* <Input
-          label="Người tạo*"  
-          placeholder="Người tạo"
-          onChangeText={value => setOwner_id(value)}
-        /> */}
         <Input
           label="Tên gia phả*"
           placeholder="Nhập tên gia phả"
