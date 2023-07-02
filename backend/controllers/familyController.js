@@ -18,4 +18,10 @@ const getFamilies = async (req, res) => {
   res.status(result.statusCode).json(result)
 }
 
-module.exports = { createFamily, getFamilies }
+const getFamily = async (req, res) => {
+  const { family_id, user_id } = req.customParams
+  const result = await family.getFamily(user_id, family_id)
+  res.status(result.statusCode).json(result)
+}
+
+module.exports = { createFamily, getFamilies, getFamily }

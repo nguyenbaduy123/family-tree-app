@@ -2,7 +2,10 @@ const Joi = require('joi')
 const { v4: uuidv4 } = require('uuid')
 
 const _ = require('lodash')
+const { pick } = require('lodash')
 const knex = require('../config/connection')
+
+const peopleService = require('../services/peopleService')
 
 const personSchema = Joi.object({
   id: Joi.string().required(),
@@ -57,12 +60,18 @@ class People {
         }
       }
 
-      const person = await knex('people').insert(value).returning('*')
+      const [person] = await knex('people').insert(value).returning('*')
+
+      const { father_id, mother_id } = personData
+      if (father_id || mother_id) {
+        peopleService.updateChildren(father_id, mother_id, value.id)
+      }
+
       return {
         success: true,
         message: 'Person created successfully',
         statusCode: 200,
-        person: person,
+        person: { ...person, father_id: father_id, mother_id: mother_id },
       }
     } catch (error) {
       console.error('Create person error: ', error)
@@ -93,6 +102,53 @@ class People {
           message: 'Person is not existed',
           statusCode: 404,
         }
+      }
+    } catch (error) {
+      console.error('Error deleting user:', error)
+      return {
+        success: false,
+        message: 'Failed to delete person',
+        statusCode: 500,
+      }
+    }
+  }
+
+  updatePerson = async (personId, personData) => {
+    try {
+      const person = await knex('people')
+        .select('*')
+        .where('id', personId)
+        .andWhere('created_by_id', personData.user_id)
+        .first()
+      if (!person)
+        return { success: false, statusCode: 200, message: 'No permission' }
+      const updatedData = {
+        ...pick(personData, [
+          'full_name',
+          'gender',
+          'citizen_id',
+          'role_in_family',
+          'blood_group',
+          'date_of_birth',
+          'home_address',
+          'current_address',
+          'phone',
+          'is_alive',
+          'date_of_death',
+          'story',
+          'image_url',
+        ]),
+        updated_at: new Date(),
+      }
+
+      const result = await knex('people')
+        .where('id', personId)
+        .update(updatedData)
+
+      return {
+        success: true,
+        message: 'Person updated successfully',
+        statusCode: 200,
       }
     } catch (error) {
       console.error('Error deleting user:', error)

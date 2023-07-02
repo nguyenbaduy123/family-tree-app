@@ -7,5 +7,6 @@ router.route('/').post(authentication.verifyToken, controller.createPerson)
 router
   .route('/:person_id')
   .delete(authentication.verifyToken, controller.deletePerson)
+  .put(authentication.verifyToken, controller.updatePerson)
 
 module.exports = router

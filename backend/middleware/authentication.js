@@ -14,7 +14,8 @@ const verifyToken = (req, res, next) => {
 
   try {
     const { user } = jwt.verify(token, process.env.SECRET_KEY)
-    if (req.customParams.user_id == user.id) {
+    if (user) {
+      req.customParams = { ...req.customParams, user_id: user.id }
       next()
     } else {
       return res.status(401).json({ success: false, message: 'Unauthorized' })

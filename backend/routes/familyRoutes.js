@@ -8,4 +8,8 @@ router
   .post(controller.createFamily)
   .get(authentication.verifyToken, controller.getFamilies)
 
+router
+  .route('/:family_id')
+  .get(authentication.verifyToken, controller.getFamily)
+
 module.exports = router

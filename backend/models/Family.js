@@ -32,7 +32,7 @@ class Family {
         family: family,
       }
     } catch (error) {
-      console.log('Create family error: ', error)
+      console.error('Create family error: ', error)
       return { success: false, message: 'Failed to create family' }
     }
   }
@@ -47,6 +47,43 @@ class Family {
         success: false,
         statusCode: 500,
         message: 'Failed to get family',
+      }
+    }
+  }
+
+  getFamily = async (user_id, family_id) => {
+    try {
+      const family = await knex('families as f')
+        .where('owner_id', user_id)
+        .andWhere('f.id', family_id)
+        .join('people as p', 'f.id', 'p.family_id')
+        .leftJoin(
+          'parents_children as pc',
+          knex.raw('?? = ANY(??)', ['p.id', 'pc.children'])
+        )
+        .orderBy('p.created_at')
+        .select(
+          'p.id as person_id',
+          'pc.husband_id as father_id',
+          'pc.wife_id as mother_id',
+          'p.full_name',
+          'p.gender',
+          'p.role_in_family',
+          'p.date_of_birth',
+          'p.is_alive',
+          'p.date_of_death'
+        )
+
+      return {
+        success: true,
+        statusCode: 200,
+        people_family: family,
+      }
+    } catch (error) {
+      console.error('Get family error: ', error)
+      return {
+        success: false,
+        statusCode: 500,
       }
     }
   }

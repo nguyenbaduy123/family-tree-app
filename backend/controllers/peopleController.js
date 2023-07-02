@@ -19,7 +19,15 @@ const deletePerson = async (req, res) => {
   res.status(result.statusCode).json(result)
 }
 
+const updatePerson = async (req, res) => {
+  const personId = req.customParams.person_id
+  const personData = req.customParams
+  const result = await person.updatePerson(personId, personData)
+  res.status(result.statusCode).json(result)
+}
+
 module.exports = {
   createPerson,
   deletePerson,
+  updatePerson,
 }
