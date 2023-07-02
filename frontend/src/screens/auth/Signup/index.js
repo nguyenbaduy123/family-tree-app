@@ -7,6 +7,7 @@ import Checkbox from '../../../components/Checkbox';
 import Button from '../../../components/Button';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import axios from 'axios';
+import {BASE_URL} from '../../../../env_variable';
 
 const Signup = ({navigation}) => {
   const [checked, setChecked] = useState(false);
@@ -34,7 +35,7 @@ const Signup = ({navigation}) => {
       return;
     }
     try {
-      const response = await axios.post(`http://172.21.144.1:2222/api/users`, {
+      const response = await axios.post(`${BASE_URL}/users`, {
         username: username,
         email: email,
         password: password,

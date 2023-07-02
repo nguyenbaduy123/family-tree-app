@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {colors} from '../../utils/color';
+import {colors} from '../../../utils/color';
 
 export const styles = StyleSheet.create({
   container: {
@@ -34,33 +34,15 @@ export const styles = StyleSheet.create({
     borderRadius: 14,
     marginBottom: 14,
   },
+  selectBloodGroup: {
+    borderWidth: 1,
+    borderColor: colors.grey,
+    borderRadius: 14,
+    marginBottom: 14,
+  },
   select: {
     height: 50,
     fontWeight: 'bold',
-  },
-  buttonContainer: {
-    flex: 1,
-    alignItems: 'flex-end',
-    justifyContent: 'flex-end',
-    marginBottom: 30,
-    marginRight: 0,
-  },
-  button: {
-    width: 90,
-    height: 40,
-    backgroundColor: colors.orange,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
-    borderRadius: 14,
-  },
-  icon: {
-    width: 16,
-    height: 16,
-  },
-  buttonText: {
-    fontWeight: 'bold',
-    fontSize: 18,
   },
   selectBirthdayContainer: {
     borderWidth: 1,
@@ -88,5 +70,38 @@ export const styles = StyleSheet.create({
     height: 30,
     marginRight: 12,
     marginTop: 10,
+  },
+  radioButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+  },
+  abc: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  buttonContainer: {
+    flex: 1,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+    marginBottom: 30,
+    marginRight: 0,
+  },
+  button: {
+    width: 90,
+    height: 40,
+    backgroundColor: colors.orange,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    borderRadius: 14,
+  },
+  icon: {
+    width: 16,
+    height: 16,
+  },
+  buttonText: {
+    fontWeight: 'bold',
+    fontSize: 18,
   },
 });

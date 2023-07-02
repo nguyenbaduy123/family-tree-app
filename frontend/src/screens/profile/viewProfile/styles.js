@@ -1,16 +1,14 @@
 import {StyleSheet} from 'react-native';
-import {colors} from '../../utils/color';
+import {colors} from '../../../utils/color';
 
 export const styles = StyleSheet.create({
   container: {
     padding: 20,
   },
-  avatarHandleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
   avatarContainer: {
+    flexDirection:'row',
+    justifyContent: 'center',
+    marginBottom: 20,
     marginHorizontal: 10,
   },
   avatar: {
@@ -66,27 +64,23 @@ export const styles = StyleSheet.create({
     marginTop: 10,
   },
   buttonContainer: {
-    flex: 1,
-    alignItems: 'flex-end',
-    justifyContent: 'flex-end',
+    width: '100%',
+    height: 50,
     marginBottom: 30,
     marginRight: 0,
   },
   button: {
-    width: 90,
-    height: 40,
+    width: '100%',
+    height: 50,
     backgroundColor: colors.orange,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-evenly',
     borderRadius: 14,
   },
-  icon: {
-    width: 16,
-    height: 16,
-  },
   buttonText: {
     fontWeight: 'bold',
     fontSize: 18,
+    textAlign: 'center',
   },
 });

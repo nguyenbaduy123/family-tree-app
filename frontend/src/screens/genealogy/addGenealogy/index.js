@@ -8,11 +8,12 @@ import {
   Alert,
 } from 'react-native';
 import {styles} from './styles';
-import Input from '../../components/Input';
+import Input from '../../../components/Input';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import AuthHeader from '../../components/AuthHeader';
+import AuthHeader from '../../../components/AuthHeader';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {BASE_URL} from '../../../../env_variable';
 
 const AddGenealogy = ({navigation}) => {
   const [name, setName] = useState('');
@@ -38,7 +39,7 @@ const AddGenealogy = ({navigation}) => {
       const user_id = await AsyncStorage.getItem('user_id');
       const token = await AsyncStorage.getItem('token');
       const response = await axios.post(
-        `http://172.21.144.1:2222/api/families?user_id=${user_id}`,
+        `${BASE_URL}/families?user_id=${user_id}`,
         {
           name: name,
           branch_name: branch_name,
@@ -72,11 +73,6 @@ const AddGenealogy = ({navigation}) => {
     <SafeAreaView>
       <ScrollView style={styles.container}>
         <AuthHeader onBackPress={onBack} title="Tạo gia phả mới" />
-        {/* <Input
-          label="Người tạo*"  
-          placeholder="Người tạo"
-          onChangeText={value => setOwner_id(value)}
-        /> */}
         <Input
           label="Tên gia phả*"
           placeholder="Nhập tên gia phả"
@@ -103,7 +99,7 @@ const AddGenealogy = ({navigation}) => {
             onPress={() => handleCreateFamily()}>
             <Image
               style={styles.icon}
-              source={require('../../assets/tabs/save_icon.png')}
+              source={require('../../../assets/tabs/save_icon.png')}
             />
             <Text style={styles.buttonText}>Save</Text>
           </TouchableOpacity>

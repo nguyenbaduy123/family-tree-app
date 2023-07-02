@@ -1,23 +1,25 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import {styles} from './styles';
-import Input from '../../components/Input';
+import Input from '../../../components/Input';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import AuthHeader from '../../components/AuthHeader';
+import AuthHeader from '../../../components/AuthHeader';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {BASE_URL} from '../../../../env_variable';
 
-const AddPeople = ({navigation}) => {
+const ViewProfile = ({navigation}) => {
   const onBack = () => {
     navigation.goBack();
   };
-  const handleChangeAvatar = () => {
-    console.log('Ok đang thay đổi ảnh đại diện cho mày đây');
-  };
+  
   const [selectedValue, setSelectedValue] = useState('Khác');
   const handleValueChange = itemValue => {
     setSelectedValue(itemValue);
   };
+
   const [selectedBirthday, setSelectedBirthday] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const handleBirthdayChange = (event, date) => {
@@ -29,28 +31,63 @@ const AddPeople = ({navigation}) => {
   const openDatePicker = () => {
     setShowDatePicker(true);
   };
+
+  const [data, setData] = useState('');
+  const fetchData = async () => {
+    const user_id = await AsyncStorage.getItem('user_id');
+    const token = await AsyncStorage.getItem('token');
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/users/${user_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      setData(response.data.user);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const onUpdateProfile = () => {
+    navigation.navigate('UpdateProfile');
+  };
+
   return (
     <SafeAreaView>
       <ScrollView style={styles.container}>
-        <AuthHeader onBackPress={onBack} title="Cập nhật người trong gia phả" />
-        <Text style={styles.labelname}>Thông tin cá nhân:</Text>
-        <View style={styles.avatarHandleContainer}>
-          <View style={styles.avatarContainer}>
-            <Image
-              style={styles.avatar}
-              source={require('../../assets/tabs/avatar.jpg')}
-            />
-          </View>
-          <Text style={styles.textChangeAvatar} onPress={handleChangeAvatar}>
-            Thay đổi ảnh đại diện
-          </Text>
+        <AuthHeader onBackPress={onBack} title="Thông tin cá nhân" />
+        <View style={styles.avatarContainer}>
+          <Image
+            style={styles.avatar}
+            source={require('../../../assets/tabs/avatar.jpg')}
+          />
         </View>
         <Input
-          label="Vai vế (hiện trên phả hệ)"
-          placeholder="Ông, Cụ, Bà, Chi trưởng, Thủy tổ, Thứ..."
+          label="Username:"
+          placeholder="User name"
+          value={data.username}
         />
-        <Input label="Họ và tên" placeholder="Họ tên" />
-        <Input label="Tên khác(nếu có)" placeholder="Biệt danh, hiệu..." />
+        <Input
+          label="Email*"
+          placeholder="Email đã đăng ký tài khoản"
+          value={data.email}
+        />
+        <Input
+          label="Fullname:"
+          placeholder="Full name"
+          value={data.full_name}
+        />
+        <Input
+          label="Số điện thoại"
+          placeholder="Số điện thoại"
+          value={data.phone}
+        />
         <Text style={styles.labelname}>Giới tính</Text>
         <View style={styles.selectSex}>
           <Picker
@@ -62,8 +99,6 @@ const AddPeople = ({navigation}) => {
             <Picker.Item label="Khác" value="Khác" />
           </Picker>
         </View>
-        <Input label="Trình độ" placeholder="Học vấn, kỹ năng..." />
-        <Input label="Nghề nghiệp" placeholder="Nghề, chức..." />
         <Text style={styles.labelname}>Ngày sinh</Text>
         <View style={styles.selectBirthdayContainer}>
           <TouchableOpacity
@@ -76,7 +111,7 @@ const AddPeople = ({navigation}) => {
             </Text>
             <Image
               style={styles.calendarIcon}
-              source={require('../../assets/tabs/calendar_icon.jpg')}
+              source={require('../../../assets/tabs/calendar_icon.jpg')}
             />
           </TouchableOpacity>
           {showDatePicker && (
@@ -88,16 +123,12 @@ const AddPeople = ({navigation}) => {
             />
           )}
         </View>
-        <Input label="Nguyên quán" placeholder="Nhập nguyên quán" />
-        <Input label="Địa chỉ hiện tại" placeholder="Nhập địa chỉ hiện tại" />
-        <Input label="Số điện thoại" placeholder="Nhập số điện thoại" />
+        <Input label="Địa chỉ" placeholder="Nhập địa chỉ của bạn" />
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button}>
-            <Image
-              style={styles.icon}
-              source={require('../../assets/tabs/save_icon.png')}
-            />
-            <Text style={styles.buttonText}>Save</Text>
+            <Text onPress={onUpdateProfile} style={styles.buttonText}>
+              Click vào đây để cập nhật thông tin cá nhân.
+            </Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -105,4 +136,4 @@ const AddPeople = ({navigation}) => {
   );
 };
 
-export default AddPeople;
+export default ViewProfile;

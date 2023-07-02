@@ -1,15 +1,15 @@
-import {StyleSheet} from 'react-native';
-import {colors} from '../../../utils/color';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
+import { StyleSheet } from 'react-native';
+import { colors } from '../../../utils/color';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 export const styles = StyleSheet.create({
   eventContainer: {
     paddingHorizontal: 20,
-    paddingVertical: 15,
+    paddingTop: 10,
     backgroundColor: colors.orange,
-    width: '100%',
-    height: '71%',
-    justifyContent: 'space-between',
+    flexDirection: 'column',
+    marginBottom: 0,
+    height: 240,
   },
   eventText: {
     fontSize: 30,
@@ -36,53 +36,53 @@ export const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    flex: 1
+  },
+  calendarContainer: {
+    borderRadius: 20,
+    flex: 3,
+  },
+  footer: {
+    backgroundColor: "#FFF3D6",
+    flex: 1
+  },
+  calendar: {
+    height: 150,
+    paddingTop: 10,
+    paddingBottom: 20,
+    height: 70,
+    borderRadius: 20,
   },
   timer: {
+    width: '100%',
+    height: 60,
+    backgroundColor: '#FFF3D6',
+    marginBottom: 10,
+    borderRadius: 10,
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    backgroundColor: 'white',
-    borderRadius: 20,
-    marginTop: 12,
+    justifyContent: 'space-around',
+    padding: 8,
   },
   timerText: {
-    flexDirection: 'column',
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
-    fontSize: 16,
-    marginVertical: 5,
-  },
-  timerNumber: {
-    color: colors.orange,
-  },
-  textFontsize: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  calender: {
-    marginTop: 15,
-    backgroundColor: 'white',
-    height: '50%',
-    borderRadius: 20,
-  },
-  calenderHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 10,
-    marginHorizontal: 20,
+    justifyContent: 'space-around',
+    padding: 5
   },
-  calenderMain: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    marginTop: 10,
-  },
-  calenderFontLastLine: {
-    fontSize: 8,
-  },
-  calenderText: {
+  timerHour: {
     alignItems: 'center',
   },
-  calenderMainDay: {
-    marginBottom: 5,
+  timerDate: {
+    alignItems: 'center'
   },
+  timerMonth: {
+    alignItems: 'center'
+  },
+  timerYear: {
+    alignItems: 'center'
+  },
+  viewCalendar: {
+    backgroundColor: '#FFF3D6',
+    padding: 10,
+    borderRadius: 10
+  }
 });

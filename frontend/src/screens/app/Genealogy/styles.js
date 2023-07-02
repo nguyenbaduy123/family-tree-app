@@ -35,16 +35,23 @@ export const styles = StyleSheet.create({
   },
   container: {
     padding: 16,
-    marginTop: 8,
     height: '100%',
+    flexGrow: 1,
+  },
+  contentContainer: {
+    paddingBottom: 10,
   },
 
+  //nếu có families
   infoGenealogyContainer: {
     width: '100%',
     height: 206,
     borderColor: colors.lightGrey,
     borderWidth: 1,
     borderRadius: 10,
+    marginTop: 0,
+    marginBottom: 100,
+    flexGrow: 1,
   },
   view1: {
     width: '100%',
@@ -55,11 +62,31 @@ export const styles = StyleSheet.create({
     borderColor: colors.lightGrey,
   },
   view11: {
-    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  view111: {
+    // width: '70%',
     height: 30,
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 3,
+  },
+  view112: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 4,
+  },
+  view112Button: {
+    width: 25,
+    height: 25,
+    marginHorizontal: 6,
+  },
+  view112_icon: {
+    width: 20,
+    height: 20,
   },
   view12: {
     width: '100%',
@@ -137,14 +164,15 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 
-  // image: {
-  //   width: '100%',
-  //   height: 300,
-  // },
-  // text: {
-  //   textAlign: 'center',
-  // },
-  // textLink: {
-  //   fontWeight: 'bold',
-  // },
+  //nếu k có family
+  image: {
+    width: '100%',
+    height: 300,
+  },
+  text: {
+    textAlign: 'center',
+  },
+  textLink: {
+    fontWeight: 'bold',
+  },
 });

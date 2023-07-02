@@ -11,11 +11,13 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {colors} from './src/utils/color';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import AddGenealogy from './src/screens/addGenealogy';
 import AddEvent from './src/screens/addEvent';
-import ViewProfile from './src/screens/viewProfile';
-import UpdateGenealogy from './src/screens/updateGenealogy';
-import AddPeople from './src/screens/addPeople';
+import AddGenealogy from './src/screens/genealogy/addGenealogy';
+import UpdateGenealogy from './src/screens/genealogy/updateGenealogy';
+import UpdateProfile from './src/screens/profile/updateProfile';
+import ViewProfile from './src/screens/profile/viewProfile';
+import AddPeople from './src/screens/genealogy/addPeople';
+import FamilyTree from './src/screens/genealogy/familyTree';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -91,6 +93,16 @@ const App = () => {
             options={{headerShown: false}}
           />
           <Stack.Screen
+            name="UpdateGenealogy"
+            component={UpdateGenealogy}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="FamilyTree"
+            component={FamilyTree}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
             name="AddEvent"
             component={AddEvent}
             options={{headerShown: false}}
@@ -101,8 +113,8 @@ const App = () => {
             options={{headerShown: false}}
           />
           <Stack.Screen
-            name="UpdateGenealogy"
-            component={UpdateGenealogy}
+            name="UpdateProfile"
+            component={UpdateProfile}
             options={{headerShown: false}}
           />
           <Stack.Screen

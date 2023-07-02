@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {colors} from '../../utils/color';
+import {colors} from '../../../utils/color';
 
 export const styles = StyleSheet.create({
   container: {
@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
     marginRight: 0,
   },
   button: {
-    width: 90,
+    width: 160,
     height: 40,
     backgroundColor: colors.orange,
     flexDirection: 'row',
@@ -26,7 +26,7 @@ export const styles = StyleSheet.create({
     height: 16,
   },
   buttonText: {
-      fontWeight: 'bold',
-      fontSize:18,
+    fontWeight: 'bold',
+    fontSize: 18,
   },
 });
