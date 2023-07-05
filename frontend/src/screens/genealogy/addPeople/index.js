@@ -26,6 +26,18 @@ const AddPeople = ({navigation}) => {
     console.log('Ok đang thay đổi ảnh đại diện cho mày đây');
   };
 
+  //xử lý select cha
+  const [selectedFather, setSelectedFather] = useState('');
+  const handleFatherChange = itemValue => {
+    setSelectedFather(itemValue);
+  };
+
+  //xử lý select mẹ
+  const [selectedMother, setSelectedMother] = useState('');
+  const handleMotherChange = itemValue => {
+    setSelectedMother(itemValue);
+  };
+
   //xử lý select giới tính
   const [selectedGender, setSelectedGender] = useState('Khác');
   const handleGenderChange = itemValue => {
@@ -62,9 +74,9 @@ const AddPeople = ({navigation}) => {
       setSelectedDateOfDeath(null); // Reset ngày đã chết khi chọn lại trạng thái sống
     }
   };
- useEffect(() => {
-   setIs_alive(status === 'alive');
- }, [status]);
+  useEffect(() => {
+    setIs_alive(status === 'alive');
+  }, [status]);
   const handleDateOfDeathChange = (event, date) => {
     setShowDateOfDeathPicker(false);
     if (date !== undefined) {
@@ -75,7 +87,44 @@ const AddPeople = ({navigation}) => {
     setShowDateOfDeathPicker(true);
   };
 
-  //call api
+  //call api lấy dữ liệu của family
+  const [father, setFather] = useState([]);
+  const [mother, setMother] = useState([]);
+
+  const fetchFamily = async () => {
+    const user_id = await AsyncStorage.getItem('user_id');
+    const token = await AsyncStorage.getItem('token');
+    const familyId = await AsyncStorage.getItem('familyId');
+
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/families/${familyId}?user_id=${user_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      // Lọc danh sách người trong gia đình theo giới tính nam
+      const fatherList = response.data.people_family.filter(
+        person => person.gender === 'Nam',
+      );
+      setFather(fatherList.length > 0 ? fatherList : 'Không có');
+
+      // Lọc danh sách người trong gia đình theo giới tính nữ
+      const motherList = response.data.people_family.filter(
+        person => person.gender === 'Nữ',
+      );
+      setMother(motherList.length > 0 ? motherList : 'Không có');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchFamily();
+  }, []);
+
+  //call api create people
   const [full_name, setFull_name] = useState('');
   const [citizen_id, setCitizen_id] = useState('');
   const [role_in_family, setRole_in_family] = useState('');
@@ -108,6 +157,8 @@ const AddPeople = ({navigation}) => {
             date_of_death: selectedDateOfDeath,
             story: story,
             family_id: familyId,
+            father_id: selectedFather,
+            mother_id: selectedMother,
             generation: generation,
           },
           {
@@ -145,6 +196,8 @@ const AddPeople = ({navigation}) => {
             is_alive: is_alive,
             story: story,
             family_id: familyId,
+            father_id: selectedFather,
+            mother_id: selectedMother,
             generation: generation,
           },
           {
@@ -194,6 +247,40 @@ const AddPeople = ({navigation}) => {
           placeholder="Họ tên..."
           onChangeText={value => setFull_name(value)}
         />
+
+        <Text style={styles.labelname}>Bố của bạn:</Text>
+        <View style={styles.selectSex}>
+          <Picker
+            selectedValue={selectedFather}
+            onValueChange={handleFatherChange}
+            style={styles.select}>
+            {father.map(father => (
+              <Picker.Item
+                key={father?.person_id}
+                label={father?.full_name}
+                value={father?.person_id}
+              />
+            ))}
+            <Picker.Item label="Đã mất" value="Đã mất" />
+          </Picker>
+        </View>
+
+        <Text style={styles.labelname}>Mẹ của bạn:</Text>
+        <View style={styles.selectSex}>
+          <Picker
+            selectedValue={selectedMother}
+            onValueChange={handleMotherChange}
+            style={styles.select}>
+            {mother.map(mother => (
+              <Picker.Item
+                key={mother?.person_id}
+                label={mother?.full_name}
+                value={mother?.person_id}
+              />
+            ))}
+            <Picker.Item label="Đã mất" value="Đã mất" />
+          </Picker>
+        </View>
 
         <Text style={styles.labelname}>Giới tính:</Text>
         <View style={styles.selectSex}>
