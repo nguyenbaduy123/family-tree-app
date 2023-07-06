@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Image, ScrollView, Text, View, TouchableOpacity} from 'react-native';
+import {
+  Image,
+  ScrollView,
+  Text,
+  View,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import {styles} from './styles';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import axios from 'axios';
@@ -17,14 +24,6 @@ const Genealogy = ({navigation}) => {
 
   const onFamilyTree = familyId => {
     navigation.navigate('FamilyTree', {familyId});
-  };
-
-  const handleUpdateGenealogy = familyId => {
-    navigation.navigate('UpdateGenealogy', {familyId});
-  };
-
-  const handleDeteleGenealogy = () => {
-    console.log('Ok tao đang xóa cho mày đây');
   };
 
   //call api hiển thị family
@@ -48,6 +47,7 @@ const Genealogy = ({navigation}) => {
       console.error(error);
     }
   };
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       fetchFamilies();
@@ -73,6 +73,54 @@ const Genealogy = ({navigation}) => {
   useEffect(() => {
     fetchUser();
   }, []);
+
+  //call api delete family
+  const [deletedFamilyId, setDeletedFamilyId] = useState(null);
+  useEffect(() => {
+    if (deletedFamilyId) {
+      setFamilyData(prevData =>
+        prevData.filter(family => family.id !== deletedFamilyId),
+      );
+      setDeletedFamilyId(null);
+    }
+  }, [deletedFamilyId]);
+  const preHandleDeleteGenealogy = id => {
+    Alert.alert(
+      'Xác nhận',
+      'Bạn có muốn xóa gia phả này không?',
+      [
+        {
+          text: 'Hủy',
+          style: 'cancel',
+        },
+        {
+          text: 'Có',
+          onPress: () => {
+            handleDeteleGenealogy(id);
+          },
+        },
+      ],
+      {cancelable: false},
+    );
+  };
+  const handleDeteleGenealogy = async id => {
+    const token = await AsyncStorage.getItem('token');
+    try {
+      const response = await axios.delete(`${BASE_URL}/families/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setDeletedFamilyId(id);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  //handle update family
+  const handleUpdateGenealogy = familyId => {
+    navigation.navigate('UpdateGenealogy', { familyId });
+  };
   return (
     <SafeAreaView>
       <View style={styles.header}>
@@ -114,7 +162,7 @@ const Genealogy = ({navigation}) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={styles.view112Button}
-                      onPress={() => handleDeteleGenealogy(family.id)}>
+                      onPress={() => preHandleDeleteGenealogy(family.id)}>
                       <Image
                         style={styles.view112_icon}
                         source={require('../../../assets/tabs/delete_icon.png')}
