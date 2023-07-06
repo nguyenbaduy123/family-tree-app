@@ -23,10 +23,18 @@ const serverError = (message = 'Server Internal Error') => {
   }
 }
 
-const missingPermission = (message = 'No permission') => {
+const unauthorized = (message = 'Unauthorized') => {
   return {
     success: false,
     statusCode: 401,
+    message: message,
+  }
+}
+
+const missingPermission = (message = 'No permission') => {
+  return {
+    success: false,
+    statusCode: 403,
     message: message,
   }
 }
@@ -35,4 +43,11 @@ const response = (res, data) => {
   return res.status(data.statusCode || 200).json(data)
 }
 
-module.exports = { success, notFound, serverError, missingPermission, response }
+module.exports = {
+  success,
+  notFound,
+  serverError,
+  missingPermission,
+  response,
+  unauthorized,
+}

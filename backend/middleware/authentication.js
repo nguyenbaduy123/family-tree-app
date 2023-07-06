@@ -1,15 +1,20 @@
 const jwt = require('jsonwebtoken')
+const {
+  unauthorized,
+  response,
+  serverError,
+} = require('../utils/responseUtils')
 
 const verifyToken = (req, res, next) => {
   req.customParams = { ...req.customParams, ...req.params }
   const authorization = req.headers['authorization']
   if (!authorization) {
-    return res.status(401).json({ success: false, message: 'Unauthorized' })
+    return response(res, unauthorized())
   }
 
   const token = authorization.split(' ')[1]
   if (!token) {
-    return res.status(401).json({ success: false, message: 'Unauthorized' })
+    return response(res, unauthorized())
   }
 
   try {
@@ -18,10 +23,11 @@ const verifyToken = (req, res, next) => {
       req.customParams = { ...req.customParams, user_id: user.id }
       next()
     } else {
-      return res.status(401).json({ success: false, message: 'Unauthorized' })
+      return response(res, unauthorized())
     }
   } catch (err) {
-    return res.status(401).json({ success: false, message: 'Unauthorized' })
+    console.log('Auth failed: ', err)
+    return response(res, serverError(err.message))
   }
 }
 

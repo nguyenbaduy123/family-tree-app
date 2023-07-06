@@ -1,4 +1,5 @@
 const Family = require('../models/Family')
+const { response } = require('../utils/responseUtils')
 const family = new Family()
 
 const createFamily = async (req, res) => {
@@ -19,9 +20,29 @@ const getFamilies = async (req, res) => {
 }
 
 const getFamily = async (req, res) => {
-  const { family_id, user_id } = req.customParams
-  const result = await family.getFamily(user_id, family_id)
+  const id = req.params.id
+  const { user_id } = req.customParams
+  const result = await family.getFamily(user_id, id)
   res.status(result.statusCode).json(result)
 }
 
-module.exports = { createFamily, getFamilies, getFamily }
+const updateFamily = async (req, res) => {
+  const id = req.params.id
+  const familyData = req.customParams
+  const result = await family.updateFamily(id, familyData)
+  return response(res, result)
+}
+
+const deleteFamily = async (req, res) => {
+  const id = req.params.id
+  const result = await family.deleteFamily(id)
+  return response(res, result)
+}
+
+module.exports = {
+  createFamily,
+  getFamilies,
+  getFamily,
+  updateFamily,
+  deleteFamily,
+}

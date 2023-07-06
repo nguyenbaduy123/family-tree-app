@@ -2,6 +2,7 @@ const _ = require('lodash')
 const Joi = require('joi')
 const knex = require('../config/connection')
 const { v4: uuidv4 } = require('uuid')
+const { success, serverError, notFound } = require('../utils/responseUtils')
 
 const familySchema = Joi.object({
   id: Joi.string().required(),
@@ -26,11 +27,7 @@ class Family {
 
     try {
       const family = await knex('families').insert(value).returning('*')
-      return {
-        success: true,
-        message: 'Family created successfully',
-        family: family,
-      }
+      return success({ family: family })
     } catch (error) {
       console.error('Create family error: ', error)
       return { success: false, message: 'Failed to create family' }
@@ -43,17 +40,13 @@ class Family {
       return { success: true, families: families, statusCode: 200 }
     } catch (error) {
       console.error('Get families error: ', error)
-      return {
-        success: false,
-        statusCode: 500,
-        message: 'Failed to get family',
-      }
+      return serverError()
     }
   }
 
   getFamily = async (user_id, family_id) => {
     try {
-      const family = await knex('families as f')
+      const people_family = await knex('families as f')
         .where('owner_id', user_id)
         .andWhere('f.id', family_id)
         .join('people as p', 'f.id', 'p.family_id')
@@ -74,17 +67,38 @@ class Family {
           'p.date_of_death'
         )
 
-      return {
-        success: true,
-        statusCode: 200,
-        people_family: family,
-      }
+      const family = await knex('families').where('id', family_id).first()
+
+      return success({ people_family, family })
     } catch (error) {
       console.error('Get family error: ', error)
-      return {
-        success: false,
-        statusCode: 500,
-      }
+      return serverError()
+    }
+  }
+
+  updateFamily = async (id, familyData) => {
+    try {
+      await knex('families')
+        .where('id', id)
+        .update(_.pick(familyData, ['name', 'branch_name', 'address', 'story']))
+      return success()
+    } catch (error) {
+      console.error('Update family failed: ', error)
+      return serverError()
+    }
+  }
+
+  deleteFamily = async (id) => {
+    try {
+      const [family] = await knex('families')
+        .where('id', id)
+        .del()
+        .returning('*')
+      if (family) return success()
+      else return notFound()
+    } catch (error) {
+      console.error('Delete family failed: ', error)
+      return serverError()
     }
   }
 }

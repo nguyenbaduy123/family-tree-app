@@ -8,8 +8,12 @@ router
   .post(controller.createFamily)
   .get(authentication.verifyToken, controller.getFamilies)
 
+router.use(authentication.verifyToken)
+
 router
-  .route('/:family_id')
-  .get(authentication.verifyToken, controller.getFamily)
+  .route('/:id')
+  .get(controller.getFamily)
+  .delete(controller.deleteFamily)
+  .put(controller.updateFamily)
 
 module.exports = router

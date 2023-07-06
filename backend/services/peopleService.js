@@ -1,7 +1,6 @@
 const _ = require('lodash')
 const Joi = require('joi')
 const db = require('../config/connection')
-const { v4: uuidv4 } = require('uuid')
 
 const updateChildren = async (father_id, mother_id, child_id) => {
   try {
