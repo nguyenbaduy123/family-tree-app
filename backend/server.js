@@ -7,6 +7,7 @@ const app = express()
 const userRoutes = require('./routes/userRoutes')
 const peopleRoutes = require('./routes/peopleRoutes')
 const familyRoutes = require('./routes/familyRoutes')
+const eventRoutes = require('./routes/eventRoutes')
 const { verifyToken } = require('./middleware/authentication')
 
 app.use(express.json())
@@ -23,6 +24,7 @@ app.use((req, res, next) => {
 app.use('/api/users', userRoutes)
 app.use('/api/families', verifyToken, familyRoutes)
 app.use('/api/people', verifyToken, peopleRoutes)
+app.use('/api/events', verifyToken, eventRoutes)
 
 app.use((req, res, next) => {
   res.status(404).json({ message: 'Route not found!!!123' })
