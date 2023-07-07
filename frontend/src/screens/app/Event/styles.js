@@ -1,6 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { colors } from '../../../utils/color';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import {StyleSheet} from 'react-native';
+import {colors} from '../../../utils/color';
 
 export const styles = StyleSheet.create({
   eventContainer: {
@@ -36,16 +35,16 @@ export const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    flex: 1
+    flex: 1,
   },
   calendarContainer: {
     borderRadius: 20,
     flex: 3,
   },
-  footer: {
-    backgroundColor: "#FFF3D6",
-    flex: 1
-  },
+  // footer: {
+  //   backgroundColor: '#FFF3D6',
+  //   flex: 1,
+  // },
   calendar: {
     height: 150,
     paddingTop: 10,
@@ -66,23 +65,73 @@ export const styles = StyleSheet.create({
   timerText: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    padding: 5
+    padding: 5,
   },
   timerHour: {
     alignItems: 'center',
   },
   timerDate: {
-    alignItems: 'center'
+    alignItems: 'center',
   },
   timerMonth: {
-    alignItems: 'center'
+    alignItems: 'center',
   },
   timerYear: {
-    alignItems: 'center'
+    alignItems: 'center',
   },
   viewCalendar: {
     backgroundColor: '#FFF3D6',
     padding: 10,
-    borderRadius: 10
-  }
+    borderRadius: 10,
+  },
+
+  //css phần hiển thị event
+  view0: {
+    width: '100%',
+    padding: 10,
+  },
+  view01: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 24,
+  },
+  showEventContainer: {
+    height: 70,
+    margin: 10,
+    borderWidth: 0.5,
+    borderRadius: 8,
+  },
+  view1: {
+    width: '95%',
+    height: 40,
+    marginLeft: 10,
+    marginTop: 5,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  view11: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  view12: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  view12_button: {
+    width: 25,
+    height: 25,
+    marginHorizontal: 6,
+  },
+  view12_icon: {
+    width: 20,
+    height: 20,
+  },
+  view2: {
+    height: 30,
+    marginLeft: 10,
+  },
+  view21: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 });
