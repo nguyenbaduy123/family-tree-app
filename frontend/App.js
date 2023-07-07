@@ -11,13 +11,14 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {colors} from './src/utils/color';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import AddEvent from './src/screens/addEvent';
 import AddGenealogy from './src/screens/genealogy/addGenealogy';
 import UpdateGenealogy from './src/screens/genealogy/updateGenealogy';
 import UpdateProfile from './src/screens/profile/updateProfile';
 import ViewProfile from './src/screens/profile/viewProfile';
 import AddPeople from './src/screens/genealogy/addPeople';
 import FamilyTree from './src/screens/genealogy/familyTree';
+import AddEvent from './src/screens/event/addEvent';
+import UpdateEvent from './src/screens/event/updateEvent';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -105,6 +106,11 @@ const App = () => {
           <Stack.Screen
             name="AddEvent"
             component={AddEvent}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="UpdateEvent"
+            component={UpdateEvent}
             options={{headerShown: false}}
           />
           <Stack.Screen
