@@ -21,6 +21,16 @@ const eventSchema = Joi.object({
 })
 
 class Event {
+  getAllEvent = async (family_id) => {
+    try {
+      const events = await knex('events').where('family_id', family_id)
+      return success({ events })
+    } catch (error) {
+      console.error('Get events failed: ', error)
+      serverError()
+    }
+  }
+
   createEvent = async (eventData) => {
     const data = {
       ..._.pick(eventData, Object.keys(eventSchema.describe().keys)),

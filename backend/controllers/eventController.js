@@ -28,4 +28,16 @@ const updateEvent = async (req, res) => {
   return response(res, result)
 }
 
-module.exports = { createEvent, deleteEvent, updateEvent, getEvent }
+const getAllEvent = async (req, res) => {
+  const family_id = req.params.family_id
+  const result = await event.getAllEvent(family_id)
+  return response(res, result)
+}
+
+module.exports = {
+  createEvent,
+  deleteEvent,
+  updateEvent,
+  getEvent,
+  getAllEvent,
+}
