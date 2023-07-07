@@ -5,6 +5,7 @@ const { pick } = require('lodash')
 
 const knex = require('../config/connection')
 const { comparePassword } = require('../utils/passwordUtils')
+const { success, unauthorized, serverError } = require('../utils/responseUtils')
 
 const userSchema = Joi.object({
   id: Joi.string().required(),
@@ -86,22 +87,22 @@ class User {
       const user = await knex('users').where('email', email).first()
       if (user) {
         const isMatch = await comparePassword(password, user.hash_password)
-        if (isMatch)
-          return {
-            user: user,
-            success: true,
-            message: 'Đăng nhập thành công',
-            statusCode: 200,
-          }
+        if (isMatch) return success({ user }, 'Đăng nhập thành công')
       }
-      return {
-        success: false,
-        message: 'Tài khoản hoặc mật khẩu không chính xác',
-        statusCode: 401,
-      }
+      return unauthorized('Tài khoản hoặc mật khẩu không chính xác')
     } catch (error) {
       console.error('Login error: ', error)
       return { success: false, message: 'Có lỗi xảy ra', statusCode: 500 }
+    }
+  }
+
+  deleteUser = async (user_id) => {
+    try {
+      await knex('users').where('id', user_id).del()
+      return success()
+    } catch (error) {
+      console.error('Delete user failed: ', error)
+      return serverError()
     }
   }
 }

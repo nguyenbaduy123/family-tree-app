@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 
 const User = require('../models/User')
 const passwordUtils = require('../utils/passwordUtils')
+const { response } = require('../utils/responseUtils')
 const user = new User()
 
 const getUserById = (req, res) => {}
@@ -49,7 +50,11 @@ const updateUser = async (req, res) => {
   }
 }
 
-const deleteUser = (req, res) => {}
+const deleteUser = async (req, res) => {
+  const { user_id } = req.customParams
+  const result = await user.deleteUser(user_id)
+  return response(res, result)
+}
 
 module.exports = {
   getUserById,
@@ -57,4 +62,5 @@ module.exports = {
   updateUser,
   login,
   getUser,
+  deleteUser,
 }

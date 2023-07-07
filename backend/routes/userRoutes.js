@@ -7,6 +7,7 @@ router
   .route('/')
   .post(controller.createUser)
   .put(authentication.verifyToken, controller.updateUser)
+  .delete(authentication.verifyToken, controller.deleteUser)
 router
   .route('/:user_id')
   .put(controller.updateUser)

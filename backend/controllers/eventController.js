@@ -29,8 +29,8 @@ const updateEvent = async (req, res) => {
 }
 
 const getAllEvent = async (req, res) => {
-  const family_id = req.params.family_id
-  const result = await event.getAllEvent(family_id)
+  const { user_id } = req.customParams
+  const result = await event.getAllEvent(user_id)
   return response(res, result)
 }
 
