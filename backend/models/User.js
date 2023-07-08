@@ -18,6 +18,8 @@ const userSchema = Joi.object({
   access_token: Joi.string(),
   avatar: Joi.string(),
   phone: Joi.string(),
+  birthday: Joi.date(),
+  gender: Joi.string(),
 })
 
 class User {
@@ -73,7 +75,9 @@ class User {
     try {
       await knex('users')
         .where('id', userData.user_id)
-        .update(pick(userData, ['full_name', 'avatar', 'phone']))
+        .update(
+          pick(userData, ['full_name', 'avatar', 'phone', 'birthday', 'gender'])
+        )
 
       return { success: true, message: 'User updated successfully!' }
     } catch (error) {
