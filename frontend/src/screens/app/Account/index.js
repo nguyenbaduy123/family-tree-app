@@ -53,6 +53,24 @@ const Account = ({navigation}) => {
       {cancelable: false},
     );
   };
+
+  //call api delete user
+  const handleDeleteAccount = async () => {
+    const user_id = await AsyncStorage.getItem('user_id');
+    const token = await AsyncStorage.getItem('token');
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/users?user_id=${user_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const DeleteAccount = () => {
     Alert.alert(
       'Bạn muốn xóa tài khoản vĩnh viễn?',
@@ -65,7 +83,8 @@ const Account = ({navigation}) => {
         {
           text: 'Đồng ý',
           onPress: () => {
-            console.log('Đã xóa tài khoản thành công!');
+            handleDeleteAccount();
+            navigation.navigate('Splash');
           },
         },
       ],
