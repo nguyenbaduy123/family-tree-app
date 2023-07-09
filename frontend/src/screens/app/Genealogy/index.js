@@ -119,7 +119,7 @@ const Genealogy = ({navigation}) => {
 
   //handle update family
   const handleUpdateGenealogy = familyId => {
-    navigation.navigate('UpdateGenealogy', { familyId });
+    navigation.navigate('UpdateGenealogy', {familyId});
   };
   return (
     <SafeAreaView>

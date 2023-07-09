@@ -28,6 +28,7 @@ class Event {
         .join('users as u', 'u.id', 'f.owner_id')
         .where('u.id', user_id)
         .select(
+          'e.id',
           'e.name',
           'e.family_id',
           'e.time',

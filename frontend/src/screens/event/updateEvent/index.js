@@ -20,77 +20,155 @@ import {BASE_URL} from '../../../../env_variable';
 
 const UpdateEvent = ({navigation}) => {
   const route = useRoute();
-  // Lấy familyId từ route.params (nếu không tồn tại, giá trị mặc định là null)
-  const familyId = route.params?.familyId ?? null;
-
+  // Lấy eventId từ route.params (nếu không tồn tại, giá trị mặc định là null)
+  const eventId = route.params?.eventId ?? null;
   const onBack = () => {
     navigation.goBack();
   };
 
-  //xử lý chọn family tổ chức sự kiện
-  const [selectedFamily, setSelectedFamily] = useState('');
-  const handleFamilyChange = itemValue => {
-    setSelectedFamily(itemValue);
-  };
-
-  //xử lý chọn thời gian sự kiện
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const handleDateChange = (event, date) => {
-    setShowDatePicker(false);
-    if (date !== undefined) {
-      setSelectedDate(date);
-    }
-  };
-  const openDatePicker = () => {
-    setShowDatePicker(true);
-  };
-
-  //xử lý chọn loại sự kiện
-  const [selectedValueEvent, setSelectedValueEvent] = useState('Khác');
-  const handleValueEventChange = itemValue => {
-    setSelectedValueEvent(itemValue);
-  };
-
   //call api lấy dữ liệu của các family
-  const [families, setFamilies] = useState([]);
-  const fetchFamilies = async () => {
-    const user_id = await AsyncStorage.getItem('user_id');
+  // const [families, setFamilies] = useState([]);
+  // const fetchFamilies = async () => {
+  //   const user_id = await AsyncStorage.getItem('user_id');
+  //   const token = await AsyncStorage.getItem('token');
+  //   try {
+  //     const response = await axios.get(
+  //       `${BASE_URL}/families?user_id=${user_id}`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       },
+  //     );
+  //     setFamilies(response.data.families);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   fetchFamilies();
+  // }, []);
+
+  //call api lấy thông tin của event
+  const fetchEvent = async () => {
     const token = await AsyncStorage.getItem('token');
     try {
-      const response = await axios.get(
-        `${BASE_URL}/families?user_id=${user_id}`,
+      const response = await axios.get(`${BASE_URL}/events/${eventId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const eventData = response.data.event;
+      setUpdateData(prevData => ({
+        ...prevData,
+        name: eventData.name,
+        // family_id: eventData.family_id,
+        time: eventData.time,
+        type: eventData.type,
+        description: eventData.description,
+        location: eventData.location,
+        note: eventData.note,
+      }));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchEvent();
+  }, []);
+
+  //call api update event
+  const [updateData, setUpdateData] = useState({
+    name: '',
+    time: '',
+    type: '',
+    description: '',
+    location: '',
+    note: '',
+  });
+  const handleUpdateEvent = async () => {
+    const token = await AsyncStorage.getItem('token');
+    try {
+      const {name, time, type, description, location, note} =
+        updateData;
+      const response = await axios.put(
+        `${BASE_URL}/events/${eventId}`,
+        {
+          name,
+          time,
+          type,
+          description,
+          location,
+          note,
+        },
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         },
       );
-      setFamilies(response.data.families);
+      Alert.alert(
+        'Chúc mừng',
+        'Bạn đã cập nhật thông tin sự kiện thành công!',
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              navigation.navigate('Sự kiện');
+            },
+          },
+        ],
+        {cancelable: false},
+      );
     } catch (error) {
       console.error(error);
     }
   };
-  useEffect(() => {
-    fetchFamilies();
-  }, []);
 
-  //call api update event
-  const handleUpdateEvent = async () => {
-    console.log('ok lưu luôn');
+  // const handleFamilyChange = itemValue => {
+  //   setUpdateData(prevData => ({
+  //     ...prevData,
+  //     family_id: itemValue.toString(),
+  //   }));
+  // };
+
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const openDatePicker = () => {
+    setShowDatePicker(true);
+  };
+  const handleDateChange = (event, date) => {
+    setShowDatePicker(false);
+    if (date !== undefined) {
+      setUpdateData(prevData => ({
+        ...prevData,
+        time: date,
+      }));
+    }
+  };
+
+  const handleValueEventChange = itemValue => {
+    setUpdateData(prevData => ({
+      ...prevData,
+      type: itemValue,
+    }));
   };
 
   return (
     <SafeAreaView>
       <ScrollView style={styles.container}>
         <AuthHeader onBackPress={onBack} title="Chỉnh sửa sự kiện" />
-        <Input label="Tên sự kiện*" placeholder="Nhập tên sự kiện" />
-        <Text style={styles.labelname}>
+        <Input
+          label="Tên sự kiện*"
+          placeholder="Nhập tên sự kiện"
+          value={updateData.name}
+          onChangeText={value => setUpdateData({...updateData, name: value})}
+        />
+        {/* <Text style={styles.labelname}>
           Chọn gia đình tổ chức sự kiện cùng:
         </Text>
         <View style={styles.selectContainer}>
           <Picker
-            selectedValue={selectedFamily}
+            selectedValue={updateData.family_id}
             onValueChange={handleFamilyChange}
             style={styles.select}>
             {families.map(family => (
@@ -101,15 +179,15 @@ const UpdateEvent = ({navigation}) => {
               />
             ))}
           </Picker>
-        </View>
+        </View> */}
         <Text style={styles.labelname}>Thời gian</Text>
         <View style={styles.buttonSelectDateContainer}>
           <TouchableOpacity
             style={styles.buttonSelectDate}
             onPress={openDatePicker}>
             <Text style={styles.textSelectDate}>
-              {selectedDate
-                ? selectedDate.toLocaleDateString()
+              {updateData.time
+                ? new Date(updateData.time).toLocaleDateString()
                 : 'Chọn thời gian diễn ra sự kiện'}
             </Text>
             <Image
@@ -119,7 +197,7 @@ const UpdateEvent = ({navigation}) => {
           </TouchableOpacity>
           {showDatePicker && (
             <DateTimePicker
-              value={selectedDate || new Date()}
+              value={updateData.time ? new Date(updateData.time) : new Date()}
               mode="date"
               display="default"
               onChange={handleDateChange}
@@ -129,7 +207,7 @@ const UpdateEvent = ({navigation}) => {
         <Text style={styles.labelname}>Loại sự kiện</Text>
         <View style={styles.selectContainer}>
           <Picker
-            selectedValue={selectedValueEvent}
+            selectedValue={updateData.type}
             onValueChange={handleValueEventChange}
             style={styles.select}>
             <Picker.Item label="Sinh nhật" value="Sinh nhật" />
@@ -139,12 +217,28 @@ const UpdateEvent = ({navigation}) => {
           </Picker>
         </View>
 
-        <Input label="Mô tả" placeholder="Nhập mô tả sự kiện" />
+        <Input
+          label="Mô tả"
+          placeholder="Nhập mô tả sự kiện"
+          value={updateData.description}
+          onChangeText={value =>
+            setUpdateData({...updateData, description: value})
+          }
+        />
         <Input
           label="Địa điểm diễn ra"
           placeholder="Nhập địa điểm diễn ra sự kiện"
+          value={updateData.location}
+          onChangeText={value =>
+            setUpdateData({...updateData, location: value})
+          }
         />
-        <Input label="Thêm ghi chú" placeholder="Nhập ghi chú" />
+        <Input
+          label="Thêm ghi chú"
+          placeholder="Nhập ghi chú"
+          value={updateData.note}
+          onChangeText={value => setUpdateData({...updateData, note: value})}
+        />
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={handleUpdateEvent}>

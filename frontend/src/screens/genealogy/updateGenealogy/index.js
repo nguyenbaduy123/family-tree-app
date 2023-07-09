@@ -18,6 +18,7 @@ const UpdateGenealogy = ({navigation}) => {
     navigation.goBack();
   };
 
+  //call api lấy thông tin của family
   const fetchData = async () => {
     const user_id = await AsyncStorage.getItem('user_id');
     const token = await AsyncStorage.getItem('token');
@@ -44,6 +45,7 @@ const UpdateGenealogy = ({navigation}) => {
     fetchData();
   }, []);
 
+  //call api update family
   const [updateData, setUpdateData] = useState({
     name: '',
     branch_name: '',

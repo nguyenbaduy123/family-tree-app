@@ -95,11 +95,22 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 24,
   },
+  container: {
+    width: '100%',
+    height: '100%',
+    flexGrow: 1,
+  },
+  contentContainer: {
+    paddingBottom: 10,
+  },
   showEventContainer: {
-    height: 70,
+    height: 200,
     margin: 10,
     borderWidth: 0.5,
     borderRadius: 8,
+    marginTop: 0,
+    marginBottom: 300,
+    flexGrow: 1,
   },
   view1: {
     width: '95%',
@@ -129,9 +140,30 @@ export const styles = StyleSheet.create({
   view2: {
     height: 30,
     marginLeft: 10,
+    flexDirection: 'row',
   },
   view21: {
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  view3: {
+    height: 30,
+    marginLeft: 10,
+    flexDirection: 'row',
+  },
+  view4: {
+    height: 30,
+    marginLeft: 10,
+    flexDirection: 'row',
+  },
+  view5: {
+    height: 30,
+    marginLeft: 10,
+    flexDirection: 'row',
+  },
+  view6: {
+    height: 30,
+    marginLeft: 10,
+    flexDirection: 'row',
   },
 });
