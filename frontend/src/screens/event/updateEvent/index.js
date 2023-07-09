@@ -26,6 +26,36 @@ const UpdateEvent = ({navigation}) => {
     navigation.goBack();
   };
 
+  // xử lý thay đổi ngày tháng
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const openDatePicker = () => {
+    setShowDatePicker(true);
+  };
+  const handleDateChange = (event, date) => {
+    setShowDatePicker(false);
+    if (date !== undefined) {
+      setUpdateData(prevData => ({
+        ...prevData,
+        time: date,
+      }));
+    }
+  };
+
+  //xử lý thay đổi loại sự kiện
+  const handleValueEventChange = itemValue => {
+    setUpdateData(prevData => ({
+      ...prevData,
+      type: itemValue,
+    }));
+  };
+ //xử lý thay đổi Family
+  // const handleFamilyChange = itemValue => {
+  //   setUpdateData(prevData => ({
+  //     ...prevData,
+  //     family_id: itemValue.toString(),
+  //   }));
+  // };
+
   //call api lấy dữ liệu của các family
   // const [families, setFamilies] = useState([]);
   // const fetchFamilies = async () => {
@@ -89,8 +119,7 @@ const UpdateEvent = ({navigation}) => {
   const handleUpdateEvent = async () => {
     const token = await AsyncStorage.getItem('token');
     try {
-      const {name, time, type, description, location, note} =
-        updateData;
+      const {name, time, type, description, location, note} = updateData;
       const response = await axios.put(
         `${BASE_URL}/events/${eventId}`,
         {
@@ -123,34 +152,6 @@ const UpdateEvent = ({navigation}) => {
     } catch (error) {
       console.error(error);
     }
-  };
-
-  // const handleFamilyChange = itemValue => {
-  //   setUpdateData(prevData => ({
-  //     ...prevData,
-  //     family_id: itemValue.toString(),
-  //   }));
-  // };
-
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const openDatePicker = () => {
-    setShowDatePicker(true);
-  };
-  const handleDateChange = (event, date) => {
-    setShowDatePicker(false);
-    if (date !== undefined) {
-      setUpdateData(prevData => ({
-        ...prevData,
-        time: date,
-      }));
-    }
-  };
-
-  const handleValueEventChange = itemValue => {
-    setUpdateData(prevData => ({
-      ...prevData,
-      type: itemValue,
-    }));
   };
 
   return (

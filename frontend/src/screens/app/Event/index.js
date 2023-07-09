@@ -92,7 +92,7 @@ const Event = ({navigation}) => {
     });
   }, [events]);
 
-  //call api update event
+  //xử lý update event
   const handleUpdateEvent = eventId => {
     navigation.navigate('UpdateEvent', {eventId});
   };
@@ -107,6 +107,7 @@ const Event = ({navigation}) => {
       setDeletedEventId(null);
     }
   }, [deletedEventId]);
+
   const preHandleDeleteEvent = id => {
     Alert.alert(
       'Xác nhận',
