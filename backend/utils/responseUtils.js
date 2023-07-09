@@ -1,46 +1,26 @@
 const success = (data = {}, message = 'Success!') => {
-  return {
-    ...data,
-    statusCode: 200,
-    success: true,
-    message: message,
-  }
+  return { ...data, ...responseJson(200, message) }
 }
 
-const notFound = (message = 'Not found!') => {
-  return {
-    success: false,
-    statusCode: 404,
-    message: message,
-  }
-}
+const badRequest = (message = 'Bad Request!') => responseJson(400, message)
 
-const serverError = (message = 'Server Internal Error') => {
-  return {
-    success: false,
-    statusCode: 500,
-    message: message,
-  }
-}
+const notFound = (message = 'Not found!') => responseJson(404, message)
 
-const unauthorized = (message = 'Unauthorized') => {
-  return {
-    success: false,
-    statusCode: 401,
-    message: message,
-  }
-}
+const serverError = (message = 'Server Internal Error') =>
+  responseJson(500, message)
 
-const missingPermission = (message = 'No permission') => {
-  return {
-    success: false,
-    statusCode: 403,
-    message: message,
-  }
+const unauthorized = (message = 'Unauthorized') => responseJson(401, message)
+
+const missingPermission = (message = 'No permission') =>
+  responseJson(403, message)
+
+const responseJson = (statusCode, message) => {
+  let success = statusCode >= 200 && statusCode <= 299
+  return { success, statusCode, message }
 }
 
 const response = (res, data) => {
-  return res.status(data.statusCode || 200).json(data)
+  return res.status(data.statusCode || 400).json(data)
 }
 
 module.exports = {
@@ -50,4 +30,5 @@ module.exports = {
   missingPermission,
   response,
   unauthorized,
+  badRequest,
 }
