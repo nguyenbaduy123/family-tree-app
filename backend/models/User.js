@@ -61,7 +61,15 @@ class User {
   getUser = async (id) => {
     try {
       const user = await knex('users')
-        .select('username', 'email', 'full_name', 'avatar', 'phone')
+        .select(
+          'username',
+          'email',
+          'full_name',
+          'avatar',
+          'phone',
+          'birthday',
+          'gender'
+        )
         .where('id', id)
         .first()
       return { success: true, user: user, statusCode: 200 }

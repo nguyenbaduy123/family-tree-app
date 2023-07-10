@@ -3,7 +3,12 @@ const fs = require('fs')
 const multer = require('multer')
 const crypto = require('crypto')
 
-const { response, badRequest, notFound } = require('../utils/responseUtils')
+const {
+  response,
+  badRequest,
+  notFound,
+  success,
+} = require('../utils/responseUtils')
 
 const storage = multer.diskStorage({
   destination: 'uploads/',
@@ -32,7 +37,7 @@ const uploadResult = (err, req, res, next) => {
 
 const uploadSuccess = (req, res) => {
   const url = `${req.protocol}://${req.get('host')}/assets/${req.file.filename}`
-  return response(res, { url })
+  return response(res, success({ url }))
 }
 
 const getFile = (req, res) => {

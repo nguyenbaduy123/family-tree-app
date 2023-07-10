@@ -97,7 +97,11 @@ const Account = ({navigation}) => {
         <View style={styles.avatarContainer}>
           <Image
             style={styles.avatar}
-            source={require('../../../assets/tabs/avatar.jpg')}
+            source={
+              data.avatar !== null
+                ? {uri: data.avatar}
+                : require('../../../assets/tabs/avatar.jpg')
+            }
           />
         </View>
         <View style={styles.textInfoContainer}>

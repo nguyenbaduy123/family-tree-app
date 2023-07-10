@@ -133,6 +133,7 @@ export const styles = StyleSheet.create({
     marginRight: 10,
   },
   avatar: {
+    borderRadius: 50,
     width: 32,
     height: 32,
   },

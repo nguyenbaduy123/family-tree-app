@@ -71,8 +71,11 @@ const Genealogy = ({navigation}) => {
     }
   };
   useEffect(() => {
-    fetchUser();
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchUser();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   //call api delete family
   const [deletedFamilyId, setDeletedFamilyId] = useState(null);
@@ -202,7 +205,11 @@ const Genealogy = ({navigation}) => {
                 <View style={styles.view21}>
                   <Image
                     style={styles.avatar}
-                    source={require('../../../assets/tabs/avatar.jpg')}
+                    source={
+                      user.avatar !== null
+                        ? {uri: user.avatar}
+                        : require('../../../assets/tabs/avatar.jpg')
+                    }
                   />
                 </View>
                 <View style={styles.view22}>

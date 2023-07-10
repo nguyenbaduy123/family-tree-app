@@ -6,12 +6,13 @@ export const styles = StyleSheet.create({
     padding: 20,
   },
   avatarContainer: {
-    flexDirection:'row',
+    flexDirection: 'row',
     justifyContent: 'center',
     marginBottom: 20,
     marginHorizontal: 10,
   },
   avatar: {
+    borderRadius: 50,
     width: 90,
     height: 90,
   },

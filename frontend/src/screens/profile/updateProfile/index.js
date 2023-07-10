@@ -16,34 +16,82 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BASE_URL} from '../../../../env_variable';
+import ImagePicker from 'react-native-image-crop-picker';
 
 const UpdateProfile = ({navigation}) => {
   const onBack = () => {
     navigation.goBack();
   };
-  const handleChangeAvatar = () => {
-    console.log('Ok đang thay đổi ảnh đại diện cho mày đây');
-  };
-  const [selectedValue, setSelectedValue] = useState('Khác');
-  const handleValueChange = itemValue => {
-    setSelectedValue(itemValue);
-  };
 
-  const [selectedBirthday, setSelectedBirthday] = useState(null);
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const handleBirthdayChange = (event, date) => {
-    setShowDatePicker(false);
-    if (date !== undefined) {
-      setSelectedBirthday(date);
+  //xử lý chọn avatar
+  const handleSelectImage = async () => {
+    try {
+      const image = await ImagePicker.openPicker({
+        mediaType: 'photo',
+        compressImageMaxWidth: 500,
+        compressImageMaxHeight: 500,
+        compressImageQuality: 0.5,
+        cropping: true,
+      });
+
+      const {path, mime} = image;
+      const file = {
+        uri: path,
+        type: mime,
+        name: 'image.png',
+      };
+      handleChangeAvatar(file);
+    } catch (error) {
+      console.log(error);
     }
   };
+  const [url, setUrl] = useState(null);
+  const handleChangeAvatar = async file => {
+    const token = await AsyncStorage.getItem('token');
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const response = await axios.post(`${BASE_URL}/uploads`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setUrl(response.data.url);
+      setUpdateData(prevData => ({
+        ...prevData,
+        avatar: response.data.url, // Cập nhật giá trị avatar trong updateData
+      }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //xử lý chọn giới tính
+  const handleGenderChange = itemValue => {
+    setUpdateData(prevData => ({
+      ...prevData,
+      gender: itemValue,
+    }));
+  };
+
+  //xử lý chọn ngày sinh
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const openDatePicker = () => {
     setShowDatePicker(true);
   };
+  const handleBirthdayChange = (event, date) => {
+    setShowDatePicker(false);
+    if (date !== undefined) {
+      setUpdateData(prevData => ({
+        ...prevData,
+        birthday: date,
+      }));
+    }
+  };
 
-  //update
-  const [data, setData] = useState([]);
-  const fetchData = async () => {
+  //call api lấy thông tin user
+  const fetchUser = async () => {
     const user_id = await AsyncStorage.getItem('user_id');
     const token = await AsyncStorage.getItem('token');
     try {
@@ -52,33 +100,43 @@ const UpdateProfile = ({navigation}) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setData(response.data.user);
-      setUpdateData({
-        full_name: response.data.user.full_name,
-        phone: response.data.user.phone,
-      });
+      const userData = response.data.user;
+      setUpdateData(prevData => ({
+        ...prevData,
+        avatar: userData.avatar,
+        full_name: userData.full_name,
+        phone: userData.phone,
+        gender: userData.gender,
+        birthday: userData.birthday,
+      }));
     } catch (error) {
       console.error(error);
     }
   };
   useEffect(() => {
-    fetchData();
+    fetchUser();
   }, []);
 
   const [updateData, setUpdateData] = useState({
+    avatar: '',
     full_name: '',
     phone: '',
+    birthday: '',
+    gender: '',
   });
   const handleUpdateProfile = async () => {
+    const user_id = await AsyncStorage.getItem('user_id');
+    const token = await AsyncStorage.getItem('token');
     try {
-      const {full_name, phone} = updateData;
-      const user_id = await AsyncStorage.getItem('user_id');
-      const token = await AsyncStorage.getItem('token');
-      await axios.put(
+      const {avatar, full_name, phone, birthday, gender} = updateData;
+      const response = await axios.put(
         `${BASE_URL}/users?user_id=${user_id}`,
         {
+          avatar,
           full_name,
           phone,
+          birthday,
+          gender,
         },
         {
           headers: {
@@ -86,11 +144,6 @@ const UpdateProfile = ({navigation}) => {
           },
         },
       );
-      setUpdateData({
-        ...updateData,
-        full_name: full_name,
-        phone: phone,
-      });
       Alert.alert(
         'Chúc mừng',
         'Bạn đã cập nhật thông tin cá nhân thành công!',
@@ -117,23 +170,20 @@ const UpdateProfile = ({navigation}) => {
           <View style={styles.avatarContainer}>
             <Image
               style={styles.avatar}
-              source={require('../../../assets/tabs/avatar.jpg')}
+              source={
+                updateData.avatar !== ''
+                  ? {uri: updateData.avatar}
+                  : url === null
+                  ? require('../../../assets/tabs/avatar.jpg')
+                  : {uri: url}
+              }
             />
           </View>
-          <Text style={styles.textChangeAvatar} onPress={handleChangeAvatar}>
+          <Text style={styles.textChangeAvatar} onPress={handleSelectImage}>
             Thay đổi ảnh đại diện
           </Text>
         </View>
-        <Input
-          label="Username:"
-          placeholder="User name"
-          value={data.username}
-        />
-        <Input
-          label="Email*"
-          placeholder="Email đã đăng ký tài khoản"
-          value={data.email}
-        />
+
         <Input
           label="Fullname:"
           placeholder="Full name"
@@ -151,8 +201,8 @@ const UpdateProfile = ({navigation}) => {
         <Text style={styles.labelname}>Giới tính</Text>
         <View style={styles.selectSex}>
           <Picker
-            selectedValue={selectedValue}
-            onValueChange={handleValueChange}
+            selectedValue={updateData.gender}
+            onValueChange={handleGenderChange}
             style={styles.select}>
             <Picker.Item label="Nam" value="Nam" />
             <Picker.Item label="Nữ" value="Nữ" />
@@ -165,8 +215,8 @@ const UpdateProfile = ({navigation}) => {
             style={styles.buttonSelectBirthday}
             onPress={openDatePicker}>
             <Text style={styles.textSelectBirthday}>
-              {selectedBirthday
-                ? selectedBirthday.toLocaleDateString()
+              {updateData.birthday
+                ? new Date(updateData.birthday).toLocaleDateString()
                 : 'Chọn ngày sinh'}
             </Text>
             <Image
@@ -176,14 +226,15 @@ const UpdateProfile = ({navigation}) => {
           </TouchableOpacity>
           {showDatePicker && (
             <DateTimePicker
-              value={selectedBirthday || new Date()}
+              value={
+                updateData.birthday ? new Date(updateData.birthday) : new Date()
+              }
               mode="date"
               display="default"
               onChange={handleBirthdayChange}
             />
           )}
         </View>
-        <Input label="Địa chỉ" placeholder="Nhập địa chỉ của bạn" />
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button}>
             <Image
