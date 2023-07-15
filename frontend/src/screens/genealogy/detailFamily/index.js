@@ -25,8 +25,8 @@ const DetailFamily = ({navigation}) => {
   };
 
   //xử lý thêm thành viên
-  const onCreatePeople = () => {
-    navigation.navigate('AddPeople');
+  const onCreatePeople = familyId => {
+    navigation.navigate('AddPeople', {familyId});
   };
 
   //call api lấy thông tin của family
@@ -121,14 +121,14 @@ const DetailFamily = ({navigation}) => {
       <ScrollView style={styles.container}>
         <AuthHeader onBackPress={onBack} title="Chi tiết gia phả" />
         <View style={styles.containerAddButton}>
-          <TouchableOpacity style={styles.addButton}>
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={() => onCreatePeople(familyId)}>
             <Image
               style={styles.avatar}
               source={require('../../../assets/tabs/plus.png')}
             />
-            <Text style={styles.textChangeAvatar} onPress={onCreatePeople}>
-              Thêm thành viên
-            </Text>
+            <Text style={styles.textAddButton}>Thêm thành viên</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.headerContainer}>

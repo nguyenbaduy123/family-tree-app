@@ -12,18 +12,16 @@ const FamilyTree = ({navigation}) => {
   const route = useRoute();
   // Lấy familyId từ route.params (nếu không tồn tại, giá trị mặc định là null)
   const familyId = route.params?.familyId ?? null;
-  AsyncStorage.setItem('familyId', familyId);
 
   const onBack = () => {
     navigation.goBack();
-    AsyncStorage.removeItem('familyId');
   };
   const handleGuide = () => {
     console.log('Không có hướng dẫn đâu mà bấm');
   };
 
-  const onCreatePeople = () => {
-    navigation.navigate('AddPeople');
+  const onCreatePeople = familyId => {
+    navigation.navigate('AddPeople', {familyId});
   };
 
   //call api lấy thông tin của family
@@ -31,10 +29,9 @@ const FamilyTree = ({navigation}) => {
   const fetchFamily = async () => {
     const user_id = await AsyncStorage.getItem('user_id');
     const token = await AsyncStorage.getItem('token');
-    const family_id = await AsyncStorage.getItem('familyId');
     try {
       const response = await axios.get(
-        `${BASE_URL}/families/${family_id}?user_id=${user_id}`,
+        `${BASE_URL}/families/${familyId}?user_id=${user_id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -51,61 +48,61 @@ const FamilyTree = ({navigation}) => {
   }, []);
 
   //code cây gia phả
-  // const [familyTree, setFamilyTree] = useState([
-  //   {
-  //     id: 1,
-  //     info: 'Chưa cập nhật',
-  //     children: [],
-  //   },
-  // ]);
-  // const addPerson = (parentId, direction) => {
-  //   const newPerson = {
-  //     id: Date.now(),
-  //     children: [],
-  //     direction: direction,
-  //   };
-  //   setFamilyTree(prevTree => {
-  //     const updateTree = tree => {
-  //       return tree.map(person => {
-  //         if (person.id === parentId) {
-  //           return {
-  //             ...person,
-  //             children: [...person.children, newPerson],
-  //           };
-  //         }
-  //         return {
-  //           ...person,
-  //           children: updateTree(person.children),
-  //         };
-  //       });
-  //     };
-  //     return updateTree(prevTree);
-  //   });
-  // };
-  // const renderTree = tree => {
-  //   return tree.map(person => (
-  //     <View key={person.id} style={styles.person}>
-  //       <TouchableOpacity
-  //         style={styles.buttonPeopleContainer}
-  //         onPress={onCreatePeople}>
-  //         <Image
-  //           style={styles.avatarPeople}
-  //           source={require('../../../assets/tabs/avatar.jpg')}
-  //         />
-  //         <Text style={styles.textPeople}>Chưa cập nhật</Text>
-  //       </TouchableOpacity>
-  //       {person.children.length > 0 ? (
-  //         <View style={styles.childrenContainer}>
-  //           {renderTree(person.children)}
-  //         </View>
-  //       ) : (
-  //         <TouchableOpacity onPress={() => addPerson(person.id)}>
-  //           <Text style={styles.addButton}>+</Text>
-  //         </TouchableOpacity>
-  //       )}
-  //     </View>
-  //   ));
-  // };
+  const [familyTree, setFamilyTree] = useState([
+    {
+      id: 1,
+      info: 'Chưa cập nhật',
+      children: [],
+    },
+  ]);
+  const addPerson = (parentId, direction) => {
+    const newPerson = {
+      id: Date.now(),
+      children: [],
+      direction: direction,
+    };
+    setFamilyTree(prevTree => {
+      const updateTree = tree => {
+        return tree.map(person => {
+          if (person.id === parentId) {
+            return {
+              ...person,
+              children: [...person.children, newPerson],
+            };
+          }
+          return {
+            ...person,
+            children: updateTree(person.children),
+          };
+        });
+      };
+      return updateTree(prevTree);
+    });
+  };
+  const renderTree = tree => {
+    return tree.map(person => (
+      <View key={person.id} style={styles.person}>
+        <TouchableOpacity
+          style={styles.buttonPeopleContainer}
+          onPress={() => onCreatePeople(familyId)}>
+          <Image
+            style={styles.avatarPeople}
+            source={require('../../../assets/tabs/avatar.jpg')}
+          />
+          <Text style={styles.textPeople}>Chưa cập nhật</Text>
+        </TouchableOpacity>
+        {person.children.length > 0 ? (
+          <View style={styles.childrenContainer}>
+            {renderTree(person.children)}
+          </View>
+        ) : (
+          <TouchableOpacity onPress={() => addPerson(person.id)}>
+            <Text style={styles.addButton}>+</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+    ));
+  };
 
   return (
     <SafeAreaView>
@@ -121,20 +118,14 @@ const FamilyTree = ({navigation}) => {
             <Text style={styles.textButton}>Hướng dẫn</Text>
           </TouchableOpacity>
         </View>
-        {/* <TouchableOpacity
-          style={styles.buttonPeopleContainer}
-          onPress={onCreatePeople}>
-          <Image
-            style={styles.avatarPeople}
-            source={require('../../../assets/tabs/avatar.jpg')}
-          />
-          <Text style={styles.textPeople}>Chưa cập nhật</Text>
-        </TouchableOpacity> */}
+
+        <View style={styles.familyTree}>{renderTree(familyTree)}</View>
+
         <View style={styles.treeContainer}>
           <View style={styles.generation1}>
             <TouchableOpacity
               style={styles.buttonPeopleContainer}
-              onPress={onCreatePeople}>
+              onPress={() => onCreatePeople(familyId)}>
               <Image
                 style={styles.avatarPeople}
                 source={require('../../../assets/tabs/avatar.jpg')}
@@ -143,7 +134,7 @@ const FamilyTree = ({navigation}) => {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.buttonPeopleContainer}
-              onPress={onCreatePeople}>
+              onPress={() => onCreatePeople(familyId)}>
               <Image
                 style={styles.avatarPeople}
                 source={require('../../../assets/tabs/avatar.jpg')}
@@ -156,7 +147,7 @@ const FamilyTree = ({navigation}) => {
             <View style={styles.couple1}>
               <TouchableOpacity
                 style={styles.buttonPeopleContainer}
-                onPress={onCreatePeople}>
+                onPress={() => onCreatePeople(familyId)}>
                 <Image
                   style={styles.avatarPeople}
                   source={require('../../../assets/tabs/avatar.jpg')}
@@ -165,7 +156,7 @@ const FamilyTree = ({navigation}) => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.buttonPeopleContainer}
-                onPress={onCreatePeople}>
+                onPress={() => onCreatePeople(familyId)}>
                 <Image
                   style={styles.avatarPeople}
                   source={require('../../../assets/tabs/avatar.jpg')}
@@ -176,7 +167,7 @@ const FamilyTree = ({navigation}) => {
             <View style={styles.couple2}>
               <TouchableOpacity
                 style={styles.buttonPeopleContainer}
-                onPress={onCreatePeople}>
+                onPress={() => onCreatePeople(familyId)}>
                 <Image
                   style={styles.avatarPeople}
                   source={require('../../../assets/tabs/avatar.jpg')}
@@ -185,7 +176,7 @@ const FamilyTree = ({navigation}) => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.buttonPeopleContainer}
-                onPress={onCreatePeople}>
+                onPress={() => onCreatePeople(familyId)}>
                 <Image
                   style={styles.avatarPeople}
                   source={require('../../../assets/tabs/avatar.jpg')}
@@ -196,7 +187,7 @@ const FamilyTree = ({navigation}) => {
             <View style={styles.couple3}>
               <TouchableOpacity
                 style={styles.buttonPeopleContainer}
-                onPress={onCreatePeople}>
+                onPress={() => onCreatePeople(familyId)}>
                 <Image
                   style={styles.avatarPeople}
                   source={require('../../../assets/tabs/avatar.jpg')}
@@ -205,7 +196,7 @@ const FamilyTree = ({navigation}) => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.buttonPeopleContainer}
-                onPress={onCreatePeople}>
+                onPress={() => onCreatePeople(familyId)}>
                 <Image
                   style={styles.avatarPeople}
                   source={require('../../../assets/tabs/avatar.jpg')}
@@ -219,7 +210,7 @@ const FamilyTree = ({navigation}) => {
             <View style={styles.children1}>
               <TouchableOpacity
                 style={styles.buttonPeopleContainer}
-                onPress={onCreatePeople}>
+                onPress={() => onCreatePeople(familyId)}>
                 <Image
                   style={styles.avatarPeople}
                   source={require('../../../assets/tabs/avatar.jpg')}
@@ -228,7 +219,7 @@ const FamilyTree = ({navigation}) => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.buttonPeopleContainer}
-                onPress={onCreatePeople}>
+                onPress={() => onCreatePeople(familyId)}>
                 <Image
                   style={styles.avatarPeople}
                   source={require('../../../assets/tabs/avatar.jpg')}
@@ -239,7 +230,7 @@ const FamilyTree = ({navigation}) => {
             <View style={styles.children2}>
               <TouchableOpacity
                 style={styles.buttonPeopleContainer}
-                onPress={onCreatePeople}>
+                onPress={() => onCreatePeople(familyId)}>
                 <Image
                   style={styles.avatarPeople}
                   source={require('../../../assets/tabs/avatar.jpg')}
@@ -248,7 +239,7 @@ const FamilyTree = ({navigation}) => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.buttonPeopleContainer}
-                onPress={onCreatePeople}>
+                onPress={() => onCreatePeople(familyId)}>
                 <Image
                   style={styles.avatarPeople}
                   source={require('../../../assets/tabs/avatar.jpg')}
@@ -257,7 +248,7 @@ const FamilyTree = ({navigation}) => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.buttonPeopleContainer}
-                onPress={onCreatePeople}>
+                onPress={() => onCreatePeople(familyId)}>
                 <Image
                   style={styles.avatarPeople}
                   source={require('../../../assets/tabs/avatar.jpg')}
@@ -268,7 +259,7 @@ const FamilyTree = ({navigation}) => {
             <View style={styles.children3}>
               <TouchableOpacity
                 style={styles.buttonPeopleContainer}
-                onPress={onCreatePeople}>
+                onPress={() => onCreatePeople(familyId)}>
                 <Image
                   style={styles.avatarPeople}
                   source={require('../../../assets/tabs/avatar.jpg')}
@@ -277,7 +268,7 @@ const FamilyTree = ({navigation}) => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.buttonPeopleContainer}
-                onPress={onCreatePeople}>
+                onPress={() => onCreatePeople(familyId)}>
                 <Image
                   style={styles.avatarPeople}
                   source={require('../../../assets/tabs/avatar.jpg')}
@@ -287,7 +278,6 @@ const FamilyTree = ({navigation}) => {
             </View>
           </View>
         </View>
-        {/* <View style={styles.familyTree}>{renderTree(familyTree)}</View> */}
       </ScrollView>
     </SafeAreaView>
   );

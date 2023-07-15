@@ -12,13 +12,18 @@ import {styles} from './styles';
 import Input from '../../../components/Input';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import AuthHeader from '../../../components/AuthHeader';
+import {useRoute} from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {RadioButton, Checkbox} from 'react-native-paper';
 import axios from 'axios';
 import {BASE_URL} from '../../../../env_variable';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const AddPeople = ({navigation}) => {
+const AddPeople = ({ navigation }) => {
+   const route = useRoute();
+   // Lấy familyId từ route.params (nếu không tồn tại, giá trị mặc định là null)
+  const familyId = route.params?.familyId ?? null;
+  
   const onBack = () => {
     navigation.goBack();
   };
@@ -94,8 +99,6 @@ const AddPeople = ({navigation}) => {
   const fetchFamily = async () => {
     const user_id = await AsyncStorage.getItem('user_id');
     const token = await AsyncStorage.getItem('token');
-    const familyId = await AsyncStorage.getItem('familyId');
-
     try {
       const response = await axios.get(
         `${BASE_URL}/families/${familyId}?user_id=${user_id}`,

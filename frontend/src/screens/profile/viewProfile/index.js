@@ -78,8 +78,8 @@ const ViewProfile = ({navigation}) => {
         />
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button}>
-            <Text onPress={onUpdateProfile} style={styles.buttonText}>
+          <TouchableOpacity style={styles.button} onPress={onUpdateProfile}>
+            <Text style={styles.buttonText}>
               Click vào đây để cập nhật thông tin cá nhân.
             </Text>
           </TouchableOpacity>
