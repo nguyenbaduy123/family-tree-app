@@ -95,4 +95,41 @@ export const styles = StyleSheet.create({
   childrenContainer: {
     marginLeft: 32,
   },
+
+  //css cây gia phả tĩnh
+  treeContainer: {
+    marginTop: 5,
+    width: '100%',
+    backgroundColor: colors.lightGrey,
+  },
+  generation1: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  generation2: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+  },
+  couple1: {
+    flexDirection: 'row',
+  },
+  couple2: {
+    flexDirection: 'row',
+  },
+  couple3: {
+    flexDirection: 'row',
+  },
+  generation3: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  children1: {
+    flexDirection: 'row',
+  },
+  children2: {
+    flexDirection: 'row',
+  },
+  children3: {
+    flexDirection: 'row',
+  },
 });

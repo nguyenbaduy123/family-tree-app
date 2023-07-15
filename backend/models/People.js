@@ -135,6 +135,7 @@ class People {
           'phone',
           'is_alive',
           'date_of_death',
+          'generation',
           'story',
           'image_url',
         ]),

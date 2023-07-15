@@ -19,6 +19,8 @@ import AddPeople from './src/screens/genealogy/addPeople';
 import FamilyTree from './src/screens/genealogy/familyTree';
 import AddEvent from './src/screens/event/addEvent';
 import UpdateEvent from './src/screens/event/updateEvent';
+import DetailFamily from './src/screens/genealogy/detailFamily';
+import UpdatePeople from './src/screens/genealogy/updatePeople';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -104,6 +106,11 @@ const App = () => {
             options={{headerShown: false}}
           />
           <Stack.Screen
+            name="DetailFamily"
+            component={DetailFamily}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
             name="AddEvent"
             component={AddEvent}
             options={{headerShown: false}}
@@ -126,6 +133,11 @@ const App = () => {
           <Stack.Screen
             name="AddPeople"
             component={AddPeople}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="UpdatePeople"
+            component={UpdatePeople}
             options={{headerShown: false}}
           />
         </Stack.Navigator>

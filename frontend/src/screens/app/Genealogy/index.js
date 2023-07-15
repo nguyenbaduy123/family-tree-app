@@ -26,6 +26,10 @@ const Genealogy = ({navigation}) => {
     navigation.navigate('FamilyTree', {familyId});
   };
 
+  const onDetailFamily = familyId => {
+    navigation.navigate('DetailFamily', {familyId});
+  };
+
   //call api hiển thị family
   const [countFamily, setCountFamily] = useState(0);
   const [familyData, setFamilyData] = useState([]);
@@ -228,6 +232,15 @@ const Genealogy = ({navigation}) => {
                   />
                   <Text style={styles.view322}>CÂY PHẢ HỆ</Text>
                 </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.view4}
+                onPress={() => onDetailFamily(family.id)}>
+                <Image
+                  style={styles.view41}
+                  source={require('../../../assets/tabs/detail_icon.png')}
+                />
+                <Text style={styles.view42}>Chi tiết về gia phả</Text>
               </TouchableOpacity>
             </View>
           ))

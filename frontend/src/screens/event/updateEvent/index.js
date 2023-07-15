@@ -48,7 +48,7 @@ const UpdateEvent = ({navigation}) => {
       type: itemValue,
     }));
   };
- //xử lý thay đổi Family
+  //xử lý thay đổi Family
   // const handleFamilyChange = itemValue => {
   //   setUpdateData(prevData => ({
   //     ...prevData,

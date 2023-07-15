@@ -64,7 +64,15 @@ class Family {
           'p.role_in_family',
           'p.date_of_birth',
           'p.is_alive',
-          'p.date_of_death'
+          'p.date_of_death',
+          'p.citizen_id',
+          'p.blood_group',
+          'p.home_address',
+          'p.current_address',
+          'p.phone',
+          'p.generation',
+          'p.story',
+          'p.image_url'
         )
 
       const family = await knex('families').where('id', family_id).first()

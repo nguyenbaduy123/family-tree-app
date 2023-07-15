@@ -45,7 +45,7 @@ export const styles = StyleSheet.create({
   //nếu có families
   infoGenealogyContainer: {
     width: '100%',
-    height: 206,
+    height: 256,
     borderColor: colors.lightGrey,
     borderWidth: 1,
     borderRadius: 10,
@@ -161,6 +161,24 @@ export const styles = StyleSheet.create({
     marginRight: 10,
   },
   view322: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  view4: {
+    width: '100%',
+    height: 50,
+    marginTop: 5,
+    backgroundColor: colors.orange,
+    paddingLeft: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  view41: {
+    width: 28,
+    height: 28,
+    marginRight: 10,
+  },
+  view42: {
     fontSize: 18,
     fontWeight: 'bold',
   },
