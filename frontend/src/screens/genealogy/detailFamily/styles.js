@@ -21,7 +21,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  avatar: {
+  img: {
     width: 30,
     height: 30,
     margin: 10,
@@ -66,6 +66,11 @@ export const styles = StyleSheet.create({
   view11: {
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  avatar: {
+    borderRadius: 50,
+    width: 35,
+    height: 35,
   },
   view12: {
     flexDirection: 'row',

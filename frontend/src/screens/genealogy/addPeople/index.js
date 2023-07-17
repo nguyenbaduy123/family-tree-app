@@ -18,18 +18,59 @@ import {RadioButton, Checkbox} from 'react-native-paper';
 import axios from 'axios';
 import {BASE_URL} from '../../../../env_variable';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ImagePicker from 'react-native-image-crop-picker';
 
-const AddPeople = ({ navigation }) => {
-   const route = useRoute();
-   // Lấy familyId từ route.params (nếu không tồn tại, giá trị mặc định là null)
+const AddPeople = ({navigation}) => {
+  const route = useRoute();
+  // Lấy familyId từ route.params (nếu không tồn tại, giá trị mặc định là null)
   const familyId = route.params?.familyId ?? null;
-  
+
   const onBack = () => {
     navigation.goBack();
   };
-  const handleChangeAvatar = () => {
-    console.log('Ok đang thay đổi ảnh đại diện cho mày đây');
+
+  //xử lý chọn avatar
+  const handleSelectImage = async () => {
+    try {
+      const image = await ImagePicker.openPicker({
+        mediaType: 'photo',
+        compressImageMaxWidth: 500,
+        compressImageMaxHeight: 500,
+        compressImageQuality: 0.5,
+        cropping: true,
+      });
+
+      const {path, mime} = image;
+      const file = {
+        uri: path,
+        type: mime,
+        name: 'image.png',
+      };
+      handleChangeAvatar(file);
+    } catch (error) {
+      console.log(error);
+    }
   };
+  const [url, setUrl] = useState(null);
+  const handleChangeAvatar = async file => {
+    const token = await AsyncStorage.getItem('token');
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const response = await axios.post(`${BASE_URL}/uploads`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setUrl(response.data.url);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // const handleChangeAvatar = () => {
+  //   console.log('Ok đang thay đổi ảnh đại diện cho mày đây');
+  // };
 
   //xử lý select cha
   const [selectedFather, setSelectedFather] = useState('');
@@ -140,13 +181,13 @@ const AddPeople = ({ navigation }) => {
   const handleAddPeople = async () => {
     const user_id = await AsyncStorage.getItem('user_id');
     const token = await AsyncStorage.getItem('token');
-    const familyId = await AsyncStorage.getItem('familyId');
 
     try {
       if (status === 'dead') {
         const response = await axios.post(
           `${BASE_URL}/people?user_id=${user_id}`,
           {
+            image_url: url,
             full_name: full_name,
             gender: selectedGender,
             citizen_id: citizen_id,
@@ -177,7 +218,7 @@ const AddPeople = ({ navigation }) => {
             {
               text: 'OK',
               onPress: () => {
-                navigation.navigate('FamilyTree');
+                navigation.navigate('Gia phả');
               },
             },
           ],
@@ -187,6 +228,7 @@ const AddPeople = ({ navigation }) => {
         const response = await axios.post(
           `${BASE_URL}/people?user_id=${user_id}`,
           {
+            image_url: url,
             full_name: full_name,
             gender: selectedGender,
             citizen_id: citizen_id,
@@ -216,7 +258,7 @@ const AddPeople = ({ navigation }) => {
             {
               text: 'OK',
               onPress: () => {
-                navigation.navigate('FamilyTree');
+                navigation.navigate('Gia phả');
               },
             },
           ],
@@ -235,12 +277,9 @@ const AddPeople = ({ navigation }) => {
         <Text style={styles.labelname}>Thông tin cá nhân:</Text>
         <View style={styles.avatarHandleContainer}>
           <View style={styles.avatarContainer}>
-            <Image
-              style={styles.avatar}
-              source={require('../../../assets/tabs/avatar.jpg')}
-            />
+            <Image style={styles.avatar} source={{uri: url}} />
           </View>
-          <Text style={styles.textChangeAvatar} onPress={handleChangeAvatar}>
+          <Text style={styles.textChangeAvatar} onPress={handleSelectImage}>
             Thay đổi ảnh đại diện
           </Text>
         </View>

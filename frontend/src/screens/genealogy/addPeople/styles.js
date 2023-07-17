@@ -14,6 +14,7 @@ export const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   avatar: {
+    borderRadius: 50,
     width: 90,
     height: 90,
   },

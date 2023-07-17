@@ -30,9 +30,9 @@ const Genealogy = ({navigation}) => {
     navigation.navigate('DetailFamily', {familyId});
   };
 
-  //call api hiển thị family
-  const [countFamily, setCountFamily] = useState(0);
-  const [familyData, setFamilyData] = useState([]);
+  //call api hiển thị các family
+  const [countFamilies, setCountFamilies] = useState(0);
+  const [familiesData, setFamiliesData] = useState([]);
   const fetchFamilies = async () => {
     const user_id = await AsyncStorage.getItem('user_id');
     const token = await AsyncStorage.getItem('token');
@@ -45,8 +45,8 @@ const Genealogy = ({navigation}) => {
           },
         },
       );
-      setFamilyData(response.data.families);
-      setCountFamily(response.data.families.length);
+      setFamiliesData(response.data.families);
+      setCountFamilies(response.data.families.length);
     } catch (error) {
       console.error(error);
     }
@@ -59,6 +59,7 @@ const Genealogy = ({navigation}) => {
     return unsubscribe;
   }, [navigation]);
 
+  //call api lấy dữ liệu của user
   const [user, setUser] = useState('');
   const fetchUser = async () => {
     const user_id = await AsyncStorage.getItem('user_id');
@@ -81,11 +82,41 @@ const Genealogy = ({navigation}) => {
     return unsubscribe;
   }, [navigation]);
 
+  //call api lấy dữ liệu của family
+  const [totalPeople, setTotalPeople] = useState('');
+  const fetchFamily = async family_id => {
+    const user_id = await AsyncStorage.getItem('user_id');
+    const token = await AsyncStorage.getItem('token');
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/families/${family_id}?user_id=${user_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      // console.log(response.data.people_family.length);
+      const sumPeople = response.data.people_family.length;
+      setTotalPeople(prevData => ({
+        ...prevData,
+        [family_id]: sumPeople,
+      }));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    familiesData.forEach(family => {
+      fetchFamily(family.id);
+    });
+  }, [familiesData]);
+
   //call api delete family
   const [deletedFamilyId, setDeletedFamilyId] = useState(null);
   useEffect(() => {
     if (deletedFamilyId) {
-      setFamilyData(prevData =>
+      setFamiliesData(prevData =>
         prevData.filter(family => family.id !== deletedFamilyId),
       );
       setDeletedFamilyId(null);
@@ -150,8 +181,8 @@ const Genealogy = ({navigation}) => {
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.contentContainer}>
-        {countFamily > 0 ? (
-          familyData.map(family => (
+        {countFamilies > 0 ? (
+          familiesData.map(family => (
             <View style={styles.infoGenealogyContainer} key={family.id}>
               <View style={styles.view1}>
                 <View style={styles.view11}>
@@ -194,7 +225,7 @@ const Genealogy = ({navigation}) => {
                       style={styles.icon_small}
                       source={require('../../../assets/tabs/member_icon.png')}
                     />
-                    <Text>3 thành viên</Text>
+                    <Text>{totalPeople[family.id]} thành viên</Text>
                   </View>
                   <View style={styles.view133}>
                     <Image

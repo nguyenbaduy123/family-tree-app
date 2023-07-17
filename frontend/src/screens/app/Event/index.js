@@ -209,7 +209,7 @@ const Event = ({navigation}) => {
                 <View style={styles.view12}>
                   <TouchableOpacity
                     style={styles.view12_button}
-                    onPress={()=>handleUpdateEvent(event.id)}>
+                    onPress={() => handleUpdateEvent(event.id)}>
                     <Image
                       style={styles.view12_icon}
                       source={require('../../../assets/tabs/edit_icon.png')}

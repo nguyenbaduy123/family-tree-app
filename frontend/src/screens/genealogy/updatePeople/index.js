@@ -18,6 +18,7 @@ import {RadioButton, Checkbox} from 'react-native-paper';
 import axios from 'axios';
 import {BASE_URL} from '../../../../env_variable';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ImagePicker from 'react-native-image-crop-picker';
 
 const UpdatePeople = ({navigation}) => {
   const route = useRoute();
@@ -29,8 +30,48 @@ const UpdatePeople = ({navigation}) => {
     navigation.goBack();
   };
 
-  const handleChangeAvatar = () => {
-    console.log('Ok đang thay đổi ảnh đại diện cho mày đây');
+  //xử lý chọn avatar
+  const handleSelectImage = async () => {
+    try {
+      const image = await ImagePicker.openPicker({
+        mediaType: 'photo',
+        compressImageMaxWidth: 500,
+        compressImageMaxHeight: 500,
+        compressImageQuality: 0.5,
+        cropping: true,
+      });
+
+      const {path, mime} = image;
+      const file = {
+        uri: path,
+        type: mime,
+        name: 'image.png',
+      };
+      handleChangeAvatar(file);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const [url, setUrl] = useState(null);
+  const handleChangeAvatar = async file => {
+    const token = await AsyncStorage.getItem('token');
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const response = await axios.post(`${BASE_URL}/uploads`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setUrl(response.data.url);
+      setUpdateData(prevData => ({
+        ...prevData,
+        image_url: response.data.url, // Cập nhật giá trị avatar trong updateData
+      }));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   //xử lý thay đổi giới tính
@@ -69,22 +110,22 @@ const UpdatePeople = ({navigation}) => {
   const [initialStatus, setInitialStatus] = useState(''); //lưu giữ trạng thái sống/chết ban đầu
   const handleStatusChange = value => {
     setInitialStatus(value);
-    if (value === 'dead') {
-      setUpdateData(prevData => ({
-        ...prevData,
-        is_alive: false,
-      }));
-    } else {
-      setUpdateData(prevData => ({
-        ...prevData,
-        is_alive: true,
-        date_of_death: null,
-      }));
-    }
-    // setUpdateData(prevData => ({
-    //   ...prevData,
-    //   is_alive: value === 'dead' ? false : true,
-    // }));
+    setUpdateData(prevData => ({
+      ...prevData,
+      is_alive: value === 'dead' ? false : true,
+    }));
+    // if (value === 'dead') {
+    //   setUpdateData(prevData => ({
+    //     ...prevData,
+    //     is_alive: false,
+    //   }));
+    // } else {
+    //   setUpdateData(prevData => ({
+    //     ...prevData,
+    //     is_alive: true,
+    //     date_of_death: null,
+    //   }));
+    // }
   };
   const handleDateOfDeathChange = (event, date) => {
     setShowDateOfDeathPicker(false);
@@ -93,12 +134,13 @@ const UpdatePeople = ({navigation}) => {
         ...prevData,
         date_of_death: date,
       }));
-    } else {
-      setUpdateData(prevData => ({
-        ...prevData,
-        date_of_death: null,
-      }));
     }
+    // else {
+    //   setUpdateData(prevData => ({
+    //     ...prevData,
+    //     date_of_death: null,
+    //   }));
+    // }
   };
   const openDateOfDeathPicker = () => {
     setShowDateOfDeathPicker(true);
@@ -122,6 +164,7 @@ const UpdatePeople = ({navigation}) => {
       if (person) {
         setUpdateData(prevData => ({
           ...prevData,
+          image_url:person.image_url,
           full_name: person.full_name,
           gender: person.gender,
           citizen_id: person.citizen_id,
@@ -150,6 +193,7 @@ const UpdatePeople = ({navigation}) => {
 
   //call api update people
   const [updateData, setUpdateData] = useState({
+    image_url:'',
     full_name: '',
     gender: '',
     citizen_id: '',
@@ -170,6 +214,7 @@ const UpdatePeople = ({navigation}) => {
     try {
       if (initialStatus === 'dead') {
         const {
+          image_url,
           full_name,
           gender,
           citizen_id,
@@ -187,6 +232,7 @@ const UpdatePeople = ({navigation}) => {
         const response = await axios.put(
           `${BASE_URL}/people/${peopleId}?user_id=${user_id}`,
           {
+            image_url,
             full_name,
             gender,
             citizen_id,
@@ -222,6 +268,7 @@ const UpdatePeople = ({navigation}) => {
         );
       } else {
         const {
+          image_url,
           full_name,
           gender,
           citizen_id,
@@ -238,6 +285,7 @@ const UpdatePeople = ({navigation}) => {
         const response = await axios.put(
           `${BASE_URL}/people/${peopleId}?user_id=${user_id}`,
           {
+            image_url,
             full_name,
             gender,
             citizen_id,
@@ -285,10 +333,16 @@ const UpdatePeople = ({navigation}) => {
           <View style={styles.avatarContainer}>
             <Image
               style={styles.avatar}
-              source={require('../../../assets/tabs/avatar.jpg')}
+              source={
+                updateData.image_url !== ''
+                  ? {uri: updateData.image_url}
+                  : url === null
+                  ? require('../../../assets/tabs/avatar.jpg')
+                  : {uri: url}
+              }
             />
           </View>
-          <Text style={styles.textChangeAvatar} onPress={handleChangeAvatar}>
+          <Text style={styles.textChangeAvatar} onPress={handleSelectImage}>
             Thay đổi ảnh đại diện
           </Text>
         </View>

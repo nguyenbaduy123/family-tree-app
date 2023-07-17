@@ -125,7 +125,7 @@ const DetailFamily = ({navigation}) => {
             style={styles.addButton}
             onPress={() => onCreatePeople(familyId)}>
             <Image
-              style={styles.avatar}
+              style={styles.img}
               source={require('../../../assets/tabs/plus.png')}
             />
             <Text style={styles.textAddButton}>Thêm thành viên</Text>
@@ -142,7 +142,11 @@ const DetailFamily = ({navigation}) => {
           people.map(people => (
             <View style={styles.infoPeopleContainer} key={people.person_id}>
               <View style={styles.view1}>
-                <Text style={styles.view11}>Full name: </Text>
+                <Text style={styles.view11}>Thành viên: </Text>
+                <Image
+                  style={styles.avatar}
+                  source={{uri: people.image_url}}
+                />
                 <Text style={styles.view11}>{people.full_name}</Text>
                 <View style={styles.view12}>
                   <TouchableOpacity
