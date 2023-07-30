@@ -7,3 +7,6 @@
 -- npm run create để tạo container và database  
 -- npm run migrate để tạo các bảng trong cơ sở dữ liệu  
 -- npm run server để chạy server
+
+
+# npx react-native start --> npx react-native run-android để kết nối và chạy app

@@ -273,7 +273,7 @@ const AddPeople = ({navigation}) => {
   return (
     <SafeAreaView>
       <ScrollView style={styles.container}>
-        <AuthHeader onBackPress={onBack} title="Cập nhật người trong gia phả" />
+        <AuthHeader onBackPress={onBack} title="Thêm người trong gia phả" />
         <Text style={styles.labelname}>Thông tin cá nhân:</Text>
         <View style={styles.avatarHandleContainer}>
           <View style={styles.avatarContainer}>
